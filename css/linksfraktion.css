@@ -12,8 +12,8 @@
 :root {
   color-scheme: light dark;
 
-  --lf-red: #FF0000;          /* nur Fokus, Akzentlinien, Fortschritt */
-  --lf-darkred: #6F003C;      /* Buttons, Links, Auswahlelemente */
+  --lf-red: #FF0000;
+  --lf-darkred: #6F003C;
   --lf-ink: #1E1E1E;
   --lf-gray: #4A4A4A;
   --lf-line: #E5E5E5;
@@ -86,21 +86,43 @@ body {
 
 h1, h2, h3, h4, h5, h6,
 .h1, .h2, .h3, .h4, .h5, .h6,
-.large-heading, .survey-name, .group-title, .group-name {
+.large-heading, .survey-name, .group-title, .group-name,
+.completed-wrapper .completed-heading,
+.quotamessage,
+.public-stats .statsSurveyTitle,
+.form-heading {
   font-family: var(--lf-font-head) !important;
-  font-weight: 900 !important;                  /* Work Sans Black */
+  font-weight: 900 !important;
   text-transform: none !important;
   letter-spacing: 0;
   color: var(--lf-ink);
 }
 
-/* Überschriften-Skala (Eltern-Theme: h2 = Fließtextgröße) */
 h1, .h1 { font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.5rem); line-height: 1.15; }
 h2, .h2 { font-size: clamp(1.4rem, 1.2rem + 0.7vw, 1.9rem);  line-height: 1.2; }
 h3, .h3 { font-size: 1.3rem;  line-height: 1.25; }
 h4, .h4 { font-size: 1.15rem; line-height: 1.3; }
 h5, .h5, h6, .h6 { font-size: 1rem; line-height: 1.4; }
 .large-heading { font-size: clamp(2rem, 1.5rem + 2vw, 2.85rem); line-height: 1.1; }
+
+.completed-wrapper .completed-heading,
+.public-stats .statsSurveyTitle {
+  font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.5rem);
+  line-height: 1.15;
+  margin: 0 0 1rem;
+}
+.group-container .group-title {
+  font-size: clamp(1.4rem, 1.2rem + 0.7vw, 1.9rem);
+  line-height: 1.2;
+}
+.quotamessage { font-size: 1.5rem; line-height: 1.25; }
+.form-heading { font-size: 1.3rem; line-height: 1.25; }
+
+.completed-wrapper .completed-Content {
+  color: var(--lf-ink);
+  font-size: 1.14rem;
+  line-height: 1.6;
+}
 
 strong, b, th, label, .form-label, .control-label { font-weight: 600 !important; }  /* Inter max. 600 */
 label, .control-label, dl, dl dt { color: var(--lf-ink); }
@@ -117,7 +139,6 @@ a:hover, a:focus { color: var(--lf-link-hover); }
 .btn-link, .link-primary { color: var(--lf-link) !important; }
 .btn-link:hover, .btn-link:focus { color: var(--lf-link-hover) !important; }
 
-/* Sichtbarer Tastaturfokus (Eltern-Theme setzt outline:none) */
 :focus-visible {
   outline: 3px solid var(--lf-focus) !important;
   outline-offset: 2px;
@@ -151,11 +172,13 @@ body > article, body > main, body > .outerframe { flex: 1; }
 
 .ls-logo { display: block; max-height: 4rem; width: auto; margin: 2rem auto; }
 
+.lf-header-progress .ls-progress-container { height: 100%; }
+.lf-header-progress .ls-progress-container:focus-visible { outline-offset: 0; }
+
 
 /* 5) Buttons ============================================================= */
 .btn { border-radius: var(--lf-radius); font-weight: 600 !important; }
 
-/* Eltern-Theme: violette Schatten bei Hover/Fokus – abschalten */
 .btn:hover, .btn:focus, .btn:active, .btn.active,
 .btn-check:focus + .btn, .btn-check:checked + .btn:focus {
   box-shadow: none !important;
@@ -206,7 +229,6 @@ button.btn-primary:disabled, a.btn-primary.disabled, input.btn-primary:disabled 
   color: var(--lf-link);
 }
 
-/* Umschalt-Buttons (Ja/Nein, Geschlecht, .btn-check) */
 .btn-check:not(:checked) + .btn-primary,
 .btn-check:not(:checked) + .btn {
   background-color: transparent !important;
@@ -238,7 +260,7 @@ button.btn-primary:disabled, a.btn-primary.disabled, input.btn-primary:disabled 
   background-color: var(--lf-surface);
   color: var(--lf-ink);
   border-color: var(--lf-focus) !important;
-  box-shadow: 0 0 0 2px var(--lf-focus) !important;     /* statt violettem Versatzschatten */
+  box-shadow: 0 0 0 2px var(--lf-focus) !important;
 }
 .form-control::placeholder { color: var(--lf-placeholder) !important; }
 .form-control:disabled, .form-control:read-only, .form-select:disabled {
@@ -352,7 +374,6 @@ input.imageselect-checkbox:checked ~ .imageselect-select::after { color: var(--l
   border-radius: var(--lf-radius);
 }
 
-/* Akzentlinie statt grünem Unterstrich (Umfrageliste, Seitentitel) */
 .fruity_twentythree .side-body h3, .fruity_twentythree .list-surveys h3,
 .fruity_twentythree .pagetitle {
   color: var(--lf-ink);
@@ -408,7 +429,6 @@ input.imageselect-checkbox:checked ~ .imageselect-select::after { color: var(--l
 .lf-footer a { color: var(--lf-gray); }
 .lf-footer a:hover, .lf-footer a:focus { color: var(--lf-link); }
 
-/* Eltern-Theme macht .container auf der Fehlerseite zu einer Flex-Zeile */
 body.error-page {
   height: auto;
   min-height: 100vh;
@@ -461,6 +481,7 @@ body.error-page .error-link { font-size: inherit; line-height: inherit; color: v
     background-color: var(--lf-bg) !important;
     color: var(--lf-ink) !important;
   }
+
   .question-container, .card, .modal-content, .list-group-item,
   .popover, .ui-datepicker-div, .tempus-dominus-widget,
   .jumbotron, .well, pre, code {
@@ -468,14 +489,17 @@ body.error-page .error-link { font-size: inherit; line-height: inherit; color: v
     color: var(--lf-ink) !important;
     border-color: var(--lf-line) !important;
   }
+
   .form-control, .form-select { border-color: var(--lf-gray); }
 
-  /* Logo ohne Dunkelvariante: heller Untergrund */
-  .logo-container .logo,
-  .error-logo-container .logo,
-  .ls-logo {
-    background: #FFFFFF;
-    padding: 0.35rem 0.6rem;
-    border-radius: var(--lf-radius);
+  :where(body, main, article, section, div, p, span, ul, ol, li, dl, dt, dd,
+         td, th, label, legend, small, strong, b, em, i, blockquote, caption,
+         summary, output, h1, h2, h3, h4, h5, h6):not(:where(
+           a, a *, .btn, .btn *,
+           [class^="ri-"], [class*=" ri-"], [class*="fa-"],
+           .progress-bar, .lf-footer *,
+           .ls-answers th, .ls-answers th *
+         )) {
+    color: var(--lf-ink) !important;
   }
 }
