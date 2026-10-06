@@ -22,31 +22,39 @@
 </head>
 
 <body class="error-page {{ aSurveyInfo.class.body }} lang-{{ aSurveyInfo.languagecode }} {{ surveyformat }}" {{ aSurveyInfo.attr.body }}>
-    <main class="container m-auto lf-error">
+    <main class="lf-error" id="main">
         <div class="error-logo-container">
-            <img class="logo img-fluid" src="{{ imageSrc(aSurveyInfo.options.brandlogofile ?? './files/logo.svg') }}" alt="Die Linke im Bundestag">
+            <img class="logo" src="{{ imageSrc(aSurveyInfo.options.brandlogofile ?? './files/logo.svg') }}" alt="Die Linke im Bundestag">
         </div>
-        <h2 class="error-title">
+
+        <h1 class="error-title">
             {% if aError.error %}{{ aError.error }}{% endif %}
             {{ aError.title }}
-        </h2>
+        </h1>
+
         <div class="error-content">{{ aError.message }}</div>
+
         {% if aError.URL %}
             <div class="error-content">{{ aError.URL }}</div>
         {% endif %}
-        {% if aError.contact %}
-            {{ aError.contact }}
-        {% else %}
-            {{ gT("For further information please contact %s:")|format(aSurveyInfo.admin) }}
-            {% if aSurveyInfo.adminemail %}
-                <br>
-                <a class="error-link" href="mailto:{{ aSurveyInfo.adminemail }}">{{ aSurveyInfo.adminemail }}</a>
+
+        <div class="error-content error-contact">
+            {% if aError.contact %}
+                {{ aError.contact }}
+            {% else %}
+                {{ gT("For further information please contact %s:")|format(aSurveyInfo.admin) }}
+                {% if aSurveyInfo.adminemail %}
+                    <br>
+                    <a class="error-link" href="mailto:{{ aSurveyInfo.adminemail }}">{{ aSurveyInfo.adminemail }}</a>
+                {% endif %}
             {% endif %}
-        {% endif %}
+        </div>
+
         {% if aError.trace is not empty %}
-            <pre>{{ aError.trace }}</pre>
+            <pre class="error-trace">{{ aError.trace }}</pre>
         {% endif %}
     </main>
+
     {% block footer %}
         {{ include('./subviews/footer/footer.twig') }}
     {% endblock %}
