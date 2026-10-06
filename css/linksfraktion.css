@@ -162,7 +162,7 @@ body > article, body > main, body > .outerframe { flex: 1; }
 /* 4) Header / Logo ======================================================= */
 .navbar {
   background: var(--lf-bg) !important;
-  border-bottom: 1px solid var(--lf-line);
+  border-bottom: 0 !important;
   box-shadow: none !important;
 }
 .navbar-brand img, .navbar-brand svg { max-height: 3rem; width: auto; }
