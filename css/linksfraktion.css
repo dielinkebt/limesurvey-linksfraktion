@@ -84,13 +84,14 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+:where(p, li, dd, blockquote) { font-weight: 400; }
+
 h1, h2, h3, h4, h5, h6,
 .h1, .h2, .h3, .h4, .h5, .h6,
 .large-heading, .survey-name, .group-title, .group-name,
 .completed-wrapper .completed-heading,
 .quotamessage,
-.public-stats .statsSurveyTitle,
-.form-heading {
+.public-stats .statsSurveyTitle {
   font-family: var(--lf-font-head) !important;
   font-weight: 900 !important;
   text-transform: none !important;
@@ -98,6 +99,7 @@ h1, h2, h3, h4, h5, h6,
   color: var(--lf-ink);
 }
 
+/* Überschriften-Skala */
 h1, .h1 { font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.5rem); line-height: 1.15; }
 h2, .h2 { font-size: clamp(1.4rem, 1.2rem + 0.7vw, 1.9rem);  line-height: 1.2; }
 h3, .h3 { font-size: 1.3rem;  line-height: 1.25; }
@@ -116,7 +118,6 @@ h5, .h5, h6, .h6 { font-size: 1rem; line-height: 1.4; }
   line-height: 1.2;
 }
 .quotamessage { font-size: 1.5rem; line-height: 1.25; }
-.form-heading { font-size: 1.3rem; line-height: 1.25; }
 
 .completed-wrapper .completed-Content {
   color: var(--lf-ink);
@@ -124,7 +125,7 @@ h5, .h5, h6, .h6 { font-size: 1rem; line-height: 1.4; }
   line-height: 1.6;
 }
 
-strong, b, th, label, .form-label, .control-label { font-weight: 600 !important; }  /* Inter max. 600 */
+strong, b, th, label, .form-label, .control-label { font-weight: 600 !important; }
 label, .control-label, dl, dl dt { color: var(--lf-ink); }
 
 .text-muted, .help-block, .ls-question-help, .form-text { color: var(--lf-gray) !important; }
