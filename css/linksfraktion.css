@@ -264,7 +264,7 @@ button.btn-primary:disabled, a.btn-primary.disabled, input.btn-primary:disabled 
   box-shadow: 0 0 0 2px var(--lf-focus) !important;
 }
 .form-control::placeholder { color: var(--lf-placeholder) !important; }
-.form-control:disabled, .form-control:read-only, .form-select:disabled {
+.form-control:disabled, .form-control[readonly], .form-select:disabled {
   background-color: var(--lf-subtle) !important;
   color: var(--lf-gray) !important;
 }
@@ -279,6 +279,21 @@ button.btn-primary:disabled, a.btn-primary.disabled, input.btn-primary:disabled 
 }
 .form-change-lang #language-changer-select,
 .form-change-lang #lang-select::after { color: var(--lf-link) !important; }
+
+.form-select, select.form-control {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  min-height: 44px;
+  padding: 0.5rem 2.25rem 0.5rem 0.75rem;
+  line-height: 1.5;
+  font-size: 1rem;
+  background-color: var(--lf-surface);
+  color: var(--lf-ink);
+}
+.form-select.ls-important-field { height: auto; min-height: 44px; padding-top: 0.5rem; padding-bottom: 0.5rem; }
+select option { color: var(--lf-ink); background-color: var(--lf-surface); }
 
 
 /* 7) Checkbox / Radio / Bildauswahl / Slider ============================ */
