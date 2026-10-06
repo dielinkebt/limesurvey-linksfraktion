@@ -1,0 +1,161 @@
+/* Die Linke im Bundestag – Theme-Basis (Fruity TwentyThree) */
+
+:root {
+  color-scheme: light dark;
+
+  --lf-red: #FF0000;
+  --lf-darkred: #6F003C;
+  --lf-ink: #1E1E1E;
+  --lf-gray: #4A4A4A;
+  --lf-line: #E5E5E5;
+  --lf-bg: #FFFFFF;
+  --lf-surface: #FFFFFF;
+
+  --lf-link: var(--lf-darkred);
+  --lf-link-hover: #4A0027;
+  --lf-btn-bg: var(--lf-darkred);
+  --lf-btn-bg-hover: #4A0027;
+  --lf-btn-text: #FFFFFF;
+  --lf-focus: var(--lf-red);
+
+  --lf-radius: 6px;
+  --lf-font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --lf-font-head: "Work Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --bs-body-font-family: var(--lf-font-body);
+  --bs-body-color: var(--lf-ink);
+  --bs-body-bg: var(--lf-bg);
+  --bs-link-color: var(--lf-link);
+  --bs-link-hover-color: var(--lf-link-hover);
+  --bs-border-color: var(--lf-line);
+  --bs-border-radius: var(--lf-radius);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --lf-ink: #F2F2F2;
+    --lf-gray: #B8B8B8;
+    --lf-line: #333333;
+    --lf-bg: #121212;
+    --lf-surface: #1B1B1B;
+
+    --lf-link: #FF7AB0;
+    --lf-link-hover: #FFA6CB;
+    --lf-btn-bg: #8F1A56;
+    --lf-btn-bg-hover: #A82166;
+    --lf-btn-text: #FFFFFF;
+  }
+}
+
+/* Typografie */
+body {
+  font-family: var(--lf-font-body);
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--lf-ink);
+  background: var(--lf-bg);
+}
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: var(--lf-font-head);
+  font-weight: 900;
+  text-transform: none;
+  color: var(--lf-ink);
+  line-height: 1.2;
+}
+
+strong, b, th, label, .form-label { font-weight: 600; }
+
+.text-muted, .help-block, .ls-question-help { color: var(--lf-gray) !important; }
+
+a { color: var(--lf-link); text-decoration-thickness: 1px; text-underline-offset: 0.15em; }
+a:hover, a:focus { color: var(--lf-link-hover); }
+
+/* Weißraum */
+main, .container-md { padding-top: 2rem; padding-bottom: 2rem; }
+.question-container, .group-container { margin-bottom: 2.5rem; }
+
+/* Buttons: Dunkelrot, nicht Rot */
+.btn { border-radius: var(--lf-radius); font-weight: 600; font-family: var(--lf-font-body); }
+
+.btn-primary {
+  --bs-btn-bg: var(--lf-btn-bg);
+  --bs-btn-border-color: var(--lf-btn-bg);
+  --bs-btn-color: var(--lf-btn-text);
+  --bs-btn-hover-bg: var(--lf-btn-bg-hover);
+  --bs-btn-hover-border-color: var(--lf-btn-bg-hover);
+  --bs-btn-hover-color: var(--lf-btn-text);
+  --bs-btn-active-bg: var(--lf-btn-bg-hover);
+  --bs-btn-active-border-color: var(--lf-btn-bg-hover);
+  --bs-btn-active-color: var(--lf-btn-text);
+  --bs-btn-disabled-bg: var(--lf-btn-bg);
+  --bs-btn-disabled-border-color: var(--lf-btn-bg);
+}
+
+.btn-outline-secondary, .btn-secondary, .btn-default {
+  --bs-btn-color: var(--lf-ink);
+  --bs-btn-bg: transparent;
+  --bs-btn-border-color: var(--lf-line);
+  --bs-btn-hover-bg: var(--lf-surface);
+  --bs-btn-hover-border-color: var(--lf-link);
+  --bs-btn-hover-color: var(--lf-link);
+}
+
+/* Fokus: Die Linke Rot, sparsam und gut sichtbar */
+:focus-visible {
+  outline: 3px solid var(--lf-focus);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+/* Formularfelder */
+.form-control, .form-select {
+  background-color: var(--lf-surface);
+  color: var(--lf-ink);
+  border: 1px solid var(--lf-line);
+  border-radius: var(--lf-radius);
+}
+.form-control:focus, .form-select:focus {
+  border-color: var(--lf-focus);
+  box-shadow: 0 0 0 2px var(--lf-focus);
+}
+.form-check-input:checked {
+  background-color: var(--lf-darkred);
+  border-color: var(--lf-darkred);
+}
+
+/* Fortschrittsbalken */
+.progress { background: var(--lf-line); border-radius: var(--lf-radius); height: 0.5rem; }
+.progress-bar { background-color: var(--lf-red); }
+
+/* Navbar / Header */
+.navbar { background: var(--lf-bg) !important; border-bottom: 1px solid var(--lf-line); }
+.navbar-brand img, .navbar-brand svg { max-height: 3rem; width: auto; }
+
+/* Footer */
+.lf-footer { border-top: 1px solid var(--lf-line); margin-top: 4rem; padding: 2rem 0; color: var(--lf-gray); font-size: 0.9rem; }
+.lf-footer ul { list-style: none; margin: 0; padding: 0; display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center; }
+
+/* Sticky Footer (siehe Hinweis in footer.twig des Eltern-Themes) */
+body { display: flex; flex-direction: column; min-height: 100vh; padding-bottom: 0; }
+body > article, body > main, body > .outerframe { flex: 1; }
+
+/* Footer-Links als Zeile mit Mittelpunkt */
+.lf-footer li + li::before { content: "·"; margin-right: 1.5rem; color: var(--lf-gray); }
+.lf-footer a { color: var(--lf-gray); }
+.lf-footer a:hover, .lf-footer a:focus { color: var(--lf-link); }
+
+/* Logo */
+.ls-logo { display: block; max-height: 4rem; width: auto; margin: 2rem auto; }
+.lf-error { max-width: 40rem; padding: 4rem 1rem; }
+.error-logo-container .logo { max-height: 4rem; width: auto; margin-bottom: 2.5rem; }
+
+@media (prefers-color-scheme: dark) {
+  body { background: var(--lf-bg) !important; color: var(--lf-ink) !important; }
+  .question-container, .card, .modal-content { background: var(--lf-surface) !important; color: var(--lf-ink) !important; }
+  /* Logo auf hellem Grund, bis es eine Dunkelmodus-Variante gibt */
+  .logo-container .logo, .error-logo-container .logo, .ls-logo {
+    background: #FFFFFF; padding: 0.35rem 0.6rem; border-radius: var(--lf-radius);
+  }
+}

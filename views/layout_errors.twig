@@ -1,0 +1,54 @@
+{{ registerTemplateCssFile('css/errors.css') }}
+{{ registerTemplateCssFile('css/fonts.css') }}
+{{ registerTemplateCssFile('css/linksfraktion.css') }}
+{% set aError = aSurveyInfo.aError %}
+
+<!DOCTYPE html>
+<html lang="{{ aSurveyInfo.htmllanguagecode }}" dir="{{ aSurveyInfo.dir }}"
+      class="{{ aSurveyInfo.languagecode }} dir-{{ aSurveyInfo.dir }} {{ aSurveyInfo.class.html }}" {{ aSurveyInfo.attr.html }}>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>
+        {% if aError.error %}{{ aError.error }}{% else %}Error {{ aSurveyInfo.surveyls_title }}{% endif %}
+    </title>
+    <meta name="generator" content="LimeSurvey http://www.limesurvey.org"/>
+    {% if(imageSrc('./files/favicon.ico')) %}
+        <link rel="shortcut icon" href="{{ imageSrc('./files/favicon.ico') }}"/>
+    {% endif %}
+    {{ include('./subviews/header/custom_header.twig') }}
+</head>
+
+<body class="error-page {{ aSurveyInfo.class.body }} lang-{{ aSurveyInfo.languagecode }} {{ surveyformat }}" {{ aSurveyInfo.attr.body }}>
+    <main class="container m-auto lf-error">
+        <div class="error-logo-container">
+            <img class="logo img-fluid" src="{{ imageSrc(aSurveyInfo.options.brandlogofile ?? './files/logo.svg') }}" alt="Die Linke im Bundestag">
+        </div>
+        <h2 class="error-title">
+            {% if aError.error %}{{ aError.error }}{% endif %}
+            {{ aError.title }}
+        </h2>
+        <div class="error-content">{{ aError.message }}</div>
+        {% if aError.URL %}
+            <div class="error-content">{{ aError.URL }}</div>
+        {% endif %}
+        {% if aError.contact %}
+            {{ aError.contact }}
+        {% else %}
+            {{ gT("For further information please contact %s:")|format(aSurveyInfo.admin) }}
+            {% if aSurveyInfo.adminemail %}
+                <br>
+                <a class="error-link" href="mailto:{{ aSurveyInfo.adminemail }}">{{ aSurveyInfo.adminemail }}</a>
+            {% endif %}
+        {% endif %}
+        {% if aError.trace is not empty %}
+            <pre>{{ aError.trace }}</pre>
+        {% endif %}
+    </main>
+    {% block footer %}
+        {{ include('./subviews/footer/footer.twig') }}
+    {% endblock %}
+</body>
+</html>

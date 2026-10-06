@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <metadata>
+        <name>limesurvey-linksfraktion</name>
+        <title>Die Linke im Bundestag</title>
+        <type>theme</type>
+        <creationDate>2026-10-06</creationDate>
+        <author>Fraktion Die Linke im Bundestag</author>
+        <authorEmail>digitalisierung@dielinkebt.de</authorEmail>
+        <authorUrl>https://github.com/dielinkebt/limesurvey-linksfraktion</authorUrl>
+        <copyright>Copyright (C) Fraktion Die Linke im Bundestag</copyright>
+        <license>see LICENSE</license>
+        <version>0.1.0</version>
+        <apiVersion>3.0</apiVersion>
+        <description twig="on"><![CDATA[{{gT("Corporate-Design-Theme der Fraktion Die Linke im Bundestag auf Basis von Fruity TwentyThree.")}}]]></description>
+        <lastUpdate>2026-10-06 16:00:00</lastUpdate>
+        <extends>fruity_twentythree</extends>
+    </metadata>
+
+    <compatibility>
+        <version>7.0</version>
+        <version>6.0</version>
+    </compatibility>
+
+    <files>
+        <css>
+            <add>css/fonts.css</add>
+            <add>css/linksfraktion.css</add>
+        </css>
+    </files>
+
+    <options>
+        <cornerradius type="buttons" category="Simple options" width="4" title="Corner radius" options="1|2|3" optionlabels="0px|4px|20px" optionimages="cornerradius_0.svg|cornerradius_4.svg|cornerradius_20.svg">2</cornerradius>
+        <bodybackgroundcolor type="colorpicker" category="Colors" width="4" title="Background color" options="on|off" optionlabels="Yes|No">#ffffff</bodybackgroundcolor>
+        <fontcolor type="colorpicker" category="Colors" width="4" title="Font color" options="on|off" optionlabels="Yes|No">#1e1e1e</fontcolor>
+        <questionbackgroundcolor type="colorpicker" category="Colors" width="4" title="Question background color" options="on|off" optionlabels="Yes|No">#ffffff</questionbackgroundcolor>
+        <brandlogo type="buttons" category="Images" width="4" title="Logo" options="on|off" optionlabels="Yes|No">on</brandlogo>
+        <brandlogofile type="dropdown" category="Images" width="6" title="Logo file" parent="brandlogo">./files/logo.svg</brandlogofile>
+        <backgroundimage type="buttons" category="Images" width="4" title="Background image" options="on|off" optionlabels="Yes|No">off</backgroundimage>
+    </options>
+
+    <optionsOrderReact>
+        <brandlogo category="Logo"/>
+        <brandlogofile category="Logo"/>
+        <hideprivacyinfo category="Display options" />
+        <notables category="Display options" />
+        <showclearall category="Display options" />
+        <questionhelptextposition category="Display options"/>
+        <showpopups category="Display options" />
+        <fixnumauto category="Display options" />
+        <deselectsinglechoice category="Display options" />
+    </optionsOrderReact>
+
+    <engine>
+        <optionspage>core</optionspage>
+        <viewdirectory>views</viewdirectory>
+        <filesdirectory>files</filesdirectory>
+        <packages>
+            <remove>font-ibm-sans</remove>
+            <remove>font-ibm-serif</remove>
+        </packages>
+    </engine>
+
+    <updaters disabled="disabled"></updaters>
+</config>
