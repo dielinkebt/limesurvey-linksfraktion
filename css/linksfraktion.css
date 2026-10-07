@@ -549,3 +549,6 @@ body.error-page .error-link { font-size: inherit; line-height: inherit; color: v
     color: var(--lf-ink) !important;
   }
 }
+
+/* Umfrageliste (Startseite) */
+.lf-survey-list-title { text-align: center; margin: 0 0 1.5rem; }

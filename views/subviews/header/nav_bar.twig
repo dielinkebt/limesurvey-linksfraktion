@@ -2,9 +2,9 @@
     <!-- Bootstrap Navigation Bar -->
     <header role="banner" id="survey-nav" class="navbar fixed-top">
         <div class="container-fluid col-xl-8">
-            {% if( aSurveyInfo.options.brandlogo == "on") %}
+            {% if( aSurveyInfo.options.brandlogo|default('on') == "on") %}
                 <div class="navbar-brand logo-container">
-                    <img class="logo img-fluid" src="{{ imageSrc(aSurveyInfo.options.brandlogofile) }}" alt="Die Linke im Bundestag">
+                    <img class="logo img-fluid" src="{{ imageSrc(aSurveyInfo.options.brandlogofile ?? './files/logo.svg') }}" alt="Die Linke im Bundestag">
                 </div>
             {% endif %}
             <div id="navbar-menu" class="dropdown ms-auto ls-no-js-hidden">
