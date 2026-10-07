@@ -162,7 +162,16 @@ body > article, body > main, body > .outerframe { flex: 1; }
   border-bottom: 0 !important;
   box-shadow: none !important;
 }
-.navbar-brand img, .navbar-brand svg { max-height: 3rem; width: auto; }
+.navbar-brand img, .navbar-brand svg, .logo-container .logo {
+  height: 3.5rem;      /* vorher ca. 28 px effektiv, jetzt 56 px */
+  max-height: none;
+  width: auto;
+}
+
+@media (max-width: 576px) {
+  .navbar-brand img, .navbar-brand svg, .logo-container .logo { height: 3rem; }
+}
+
 #survey-nav .navbar-toggler .ri-more-fill { color: var(--lf-gray); }
 .navbar-toggle { border-color: var(--lf-line) !important; }
 .navbar-toggle .icon-bar { background-color: var(--lf-gray) !important; }
