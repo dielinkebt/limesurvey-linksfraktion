@@ -1,10 +1,11 @@
 /* ==========================================================================
    Die Linke im Bundestag – LimeSurvey-Theme (Basis: Fruity TwentyThree)
+   Grundsatz: Maße, Abstände und Größen kommen von Fruity (theme_apple.css).
+   Dieses Theme ändert nur Farben, Schriften, Rahmenfarben und Radien.
+   Ausnahmen: Überschriften-Skala (Work Sans Black), Header, Footer, Fehlerseite.
    1 Tokens · 2 Typografie · 3 Layout · 4 Header · 5 Buttons · 6 Formulare
    7 Auswahlfelder · 8 Meldungen · 9 Tabellen/Karten/Menüs · 10 Footer/Fehler
    11 Dunkelmodus
-   theme_apple.css (Eltern-Theme) hat Farben/Schatten fest verdrahtet,
-   daher !important an markierten Stellen.
    ========================================================================== */
 
 
@@ -84,6 +85,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Fließtext bleibt 400, auch wenn ein Wrapper-Element Gewicht vererbt */
 :where(p, li, dd, blockquote) { font-weight: 400; }
 
 h1, h2, h3, h4, h5, h6,
@@ -93,13 +95,13 @@ h1, h2, h3, h4, h5, h6,
 .quotamessage,
 .public-stats .statsSurveyTitle {
   font-family: var(--lf-font-head) !important;
-  font-weight: 900 !important;
+  font-weight: 900 !important;                  /* Work Sans Black */
   text-transform: none !important;
   letter-spacing: 0;
   color: var(--lf-ink);
 }
 
-/* Überschriften-Skala */
+/* Überschriften-Skala (bewusste Abweichung von Fruity: h2 = Fließtextgröße) */
 h1, .h1 { font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.5rem); line-height: 1.15; }
 h2, .h2 { font-size: clamp(1.4rem, 1.2rem + 0.7vw, 1.9rem);  line-height: 1.2; }
 h3, .h3 { font-size: 1.3rem;  line-height: 1.25; }
@@ -119,13 +121,9 @@ h5, .h5, h6, .h6 { font-size: 1rem; line-height: 1.4; }
 }
 .quotamessage { font-size: 1.5rem; line-height: 1.25; }
 
-.completed-wrapper .completed-Content {
-  color: var(--lf-ink);
-  font-size: 1.14rem;
-  line-height: 1.6;
-}
+.completed-wrapper .completed-Content { color: var(--lf-ink); }
 
-strong, b, th, label, .form-label, .control-label { font-weight: 600 !important; }
+strong, b, th, label, .form-label, .control-label { font-weight: 600 !important; }  /* Inter max. 600 */
 label, .control-label, dl, dl dt { color: var(--lf-ink); }
 
 .text-muted, .help-block, .ls-question-help, .form-text { color: var(--lf-gray) !important; }
@@ -147,10 +145,8 @@ a:hover, a:focus { color: var(--lf-link-hover); }
 .form-control:focus-visible, .form-select:focus-visible { outline: none !important; }
 
 
-/* 3) Layout / Weißraum =================================================== */
-main, .container-md { padding-top: 2rem; padding-bottom: 2rem; }
-.question-container, .group-container { margin-bottom: 2.5rem; }
-
+/* 3) Layout ============================================================== */
+/* Abstände kommen von Fruity (.question-container, .space-col …) */
 body {
   display: flex;
   flex-direction: column;
@@ -230,6 +226,7 @@ button.btn-primary:disabled, a.btn-primary.disabled, input.btn-primary:disabled 
   color: var(--lf-link);
 }
 
+/* Umschalt-Buttons (Ja/Nein, Geschlecht, .btn-check) */
 .btn-check:not(:checked) + .btn-primary,
 .btn-check:not(:checked) + .btn {
   background-color: transparent !important;
@@ -251,6 +248,7 @@ button.btn-primary:disabled, a.btn-primary.disabled, input.btn-primary:disabled 
 
 
 /* 6) Formularfelder ====================================================== */
+/* Maße (Padding, Höhe, Zeilenhöhe) bleiben bei Fruity */
 .form-control, .form-select {
   background-color: var(--lf-surface);
   color: var(--lf-ink);
@@ -280,20 +278,50 @@ button.btn-primary:disabled, a.btn-primary.disabled, input.btn-primary:disabled 
 .form-change-lang #language-changer-select,
 .form-change-lang #lang-select::after { color: var(--lf-link) !important; }
 
-.form-select, select.form-control {
-  box-sizing: border-box;
-  width: 100%;
-  max-width: 100%;
-  height: auto;
-  min-height: 44px;
-  padding: 0.5rem 2.25rem 0.5rem 0.75rem;
-  line-height: 1.5;
-  font-size: 1rem;
-  background-color: var(--lf-surface);
-  color: var(--lf-ink);
-}
-.form-select.ls-important-field { height: auto; min-height: 44px; padding-top: 0.5rem; padding-bottom: 0.5rem; }
 select option { color: var(--lf-ink); background-color: var(--lf-surface); }
+
+
+/* 6b) bootstrap-select (Dropdown-Fragen) ================================ */
+/* Nur Farben, Rahmen, Radius. Maße und Abstände bleiben bei Fruity. */
+.bootstrap-select,
+.bootstrap-select.form-control { max-width: 100%; }
+
+.bootstrap-select > .dropdown-toggle,
+.bootstrap-select > .dropdown-toggle.btn-light {
+  background-color: var(--lf-surface) !important;
+  color: var(--lf-ink) !important;
+  border: 2px solid var(--lf-gray) !important;
+  border-radius: var(--lf-radius);
+  font-weight: 400;
+}
+.bootstrap-select > .dropdown-toggle:hover {
+  border-color: var(--lf-link) !important;
+}
+.bootstrap-select.show > .dropdown-toggle,
+.bootstrap-select > .dropdown-toggle:focus {
+  background-color: var(--lf-surface) !important;
+  color: var(--lf-ink) !important;
+  border-color: var(--lf-focus) !important;
+}
+.bootstrap-select .filter-option-inner-inner { color: inherit; }
+
+.bootstrap-select .dropdown-menu {
+  background-color: var(--lf-surface);
+  border: 1px solid var(--lf-line);
+  border-radius: var(--lf-radius);
+}
+.bootstrap-select .dropdown-menu li a { color: var(--lf-ink) !important; }
+.bootstrap-select .dropdown-menu li a .text { color: inherit; }
+.bootstrap-select .dropdown-menu li a:hover,
+.bootstrap-select .dropdown-menu li a:focus,
+.bootstrap-select .dropdown-menu li a.active,
+.bootstrap-select .dropdown-menu li.active a,
+.bootstrap-select .dropdown-menu li.selected.active a {
+  background-color: var(--lf-btn-bg) !important;
+  color: var(--lf-btn-text) !important;
+}
+.bootstrap-select .dropdown-menu li a.disabled,
+.bootstrap-select .dropdown-menu .bs-title-option { color: var(--lf-gray) !important; }
 
 
 /* 7) Checkbox / Radio / Bildauswahl / Slider ============================ */
@@ -405,9 +433,9 @@ input.imageselect-checkbox:checked ~ .imageselect-select::after { color: var(--l
   border-radius: var(--lf-radius);
 }
 #survey-nav .dropdown-menu li a, .dropdown-item { color: var(--lf-ink); }
-.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus,
-.dropdown-menu > .active > a, .dropdown-menu > .active > a:hover,
-.dropdown-menu > .active > a:focus,
+.dropdown-menu li a:hover, .dropdown-menu li a:focus,
+.dropdown-menu .active a, .dropdown-menu .active a:hover,
+.dropdown-menu .active a:focus,
 #survey-nav .dropdown-menu li a:hover, #survey-nav .dropdown-menu li a:focus,
 .dropdown-item:hover, .dropdown-item:focus, .dropdown-item.active {
   background-color: var(--lf-btn-bg) !important;
@@ -508,6 +536,8 @@ body.error-page .error-link { font-size: inherit; line-height: inherit; color: v
 
   .form-control, .form-select { border-color: var(--lf-gray); }
 
+  /* Eltern-Theme setzt Textfarben fest (#1E1E1E, #152536 …):
+     Spezifität 0 + !important → schlägt Theme-Regeln, verliert gegen unsere !important-Regeln */
   :where(body, main, article, section, div, p, span, ul, ol, li, dl, dt, dd,
          td, th, label, legend, small, strong, b, em, i, blockquote, caption,
          summary, output, h1, h2, h3, h4, h5, h6):not(:where(
