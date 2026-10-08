@@ -1,11 +1,5 @@
 /* ==========================================================================
    Die Linke im Bundestag – LimeSurvey-Theme (Basis: Fruity TwentyThree)
-   Grundsatz: Maße, Abstände und Größen kommen von Fruity (theme_apple.css).
-   Dieses Theme ändert nur Farben, Schriften, Rahmenfarben und Radien.
-   Ausnahmen: Überschriften-Skala (Work Sans Black), Header, Footer, Fehlerseite.
-   1 Tokens · 2 Typografie · 3 Layout · 4 Header · 5 Buttons · 6 Formulare
-   7 Auswahlfelder · 8 Meldungen · 9 Tabellen/Karten/Menüs · 10 Footer/Fehler
-   11 Dunkelmodus
    ========================================================================== */
 
 
@@ -22,6 +16,12 @@
   --lf-surface: #FFFFFF;
   --lf-subtle: #F6F6F6;
   --lf-placeholder: #6B6B6B;
+  --lf-control-border: #747474;
+  --lf-control-hover-bg: #F7F2F4;
+  --lf-control-selected-bg: #F6E8EF;
+  --lf-control-selected-border: var(--lf-darkred);
+  --lf-error: #B42318;
+  --lf-error-bg: #FEF3F2;
 
   --lf-link: var(--lf-darkred);
   --lf-link-hover: #4A0027;
@@ -56,6 +56,12 @@
     --lf-surface: #1B1B1B;
     --lf-subtle: #1F1F1F;
     --lf-placeholder: #9A9A9A;
+    --lf-control-border: #8A8A8A;
+    --lf-control-hover-bg: #292126;
+    --lf-control-selected-bg: #351B29;
+    --lf-control-selected-border: #FF7AB0;
+    --lf-error: #FF867C;
+    --lf-error-bg: #351C1B;
 
     --lf-link: #FF7AB0;
     --lf-link-hover: #FFA6CB;
@@ -142,7 +148,6 @@ a:hover, a:focus { color: var(--lf-link-hover); }
   outline: 3px solid var(--lf-focus) !important;
   outline-offset: 2px;
 }
-.form-control:focus-visible, .form-select:focus-visible { outline: none !important; }
 
 
 /* 3) Layout ============================================================== */
@@ -184,6 +189,9 @@ body > article, body > main, body > .outerframe { flex: 1; }
 
 /* 5) Buttons ============================================================= */
 .btn { border-radius: var(--lf-radius); font-weight: 600 !important; }
+.btn, .form-control, .form-select, .bootstrap-select > .dropdown-toggle {
+  transition: color .15s ease, background-color .15s ease, border-color .15s ease;
+}
 
 .btn:hover, .btn:focus, .btn:active, .btn.active,
 .btn-check:focus + .btn, .btn-check:checked + .btn:focus {
@@ -239,7 +247,7 @@ button.btn-primary:disabled, a.btn-primary.disabled, input.btn-primary:disabled 
 .btn-check:not(:checked) + .btn-primary,
 .btn-check:not(:checked) + .btn {
   background-color: transparent !important;
-  border: 2px solid var(--lf-gray) !important;
+  border: 1px solid var(--lf-control-border) !important;
   color: var(--lf-ink) !important;
 }
 .btn-check:not(:checked) + .btn:hover {
@@ -251,8 +259,13 @@ button.btn-primary:disabled, a.btn-primary.disabled, input.btn-primary:disabled 
 .btn-check:active + .btn-primary,
 .btn-check:checked .btn-primary {
   background-color: var(--lf-control) !important;
-  border: 2px solid var(--lf-control) !important;
+  border: 1px solid var(--lf-control) !important;
   color: var(--lf-btn-text) !important;
+}
+
+.btn:disabled, .btn.disabled,
+.btn-check:disabled + .btn {
+  cursor: not-allowed;
 }
 
 
@@ -261,19 +274,31 @@ button.btn-primary:disabled, a.btn-primary.disabled, input.btn-primary:disabled 
 .form-control, .form-select {
   background-color: var(--lf-surface);
   color: var(--lf-ink);
-  border: 2px solid var(--lf-gray);
+  border: 1px solid var(--lf-control-border);
   border-radius: var(--lf-radius);
+}
+.form-control:hover:not(:disabled):not([readonly]),
+.form-select:hover:not(:disabled) {
+  border-color: var(--lf-link);
 }
 .form-control:focus, .form-select:focus {
   background-color: var(--lf-surface);
   color: var(--lf-ink);
   border-color: var(--lf-focus) !important;
-  box-shadow: 0 0 0 2px var(--lf-focus) !important;
+  box-shadow: none !important;
 }
 .form-control::placeholder { color: var(--lf-placeholder) !important; }
-.form-control:disabled, .form-control[readonly], .form-select:disabled {
+.form-control:disabled, .form-select:disabled {
   background-color: var(--lf-subtle) !important;
   color: var(--lf-gray) !important;
+  border-color: var(--lf-line) !important;
+  cursor: not-allowed;
+}
+.form-control[readonly] {
+  background-color: var(--lf-subtle) !important;
+  color: var(--lf-gray) !important;
+  border-color: var(--lf-line) !important;
+  cursor: text;
 }
 .form-control.ls-important-field {
   border-color: var(--lf-ink) !important;
@@ -299,11 +324,12 @@ select option { color: var(--lf-ink); background-color: var(--lf-surface); }
 .bootstrap-select > .dropdown-toggle.btn-light {
   background-color: var(--lf-surface) !important;
   color: var(--lf-ink) !important;
-  border: 2px solid var(--lf-gray) !important;
+  border: 1px solid var(--lf-control-border) !important;
   border-radius: var(--lf-radius);
   font-weight: 400;
 }
 .bootstrap-select > .dropdown-toggle:hover {
+  background-color: var(--lf-control-hover-bg) !important;
   border-color: var(--lf-link) !important;
 }
 .bootstrap-select.show > .dropdown-toggle,
@@ -311,6 +337,12 @@ select option { color: var(--lf-ink); background-color: var(--lf-surface); }
   background-color: var(--lf-surface) !important;
   color: var(--lf-ink) !important;
   border-color: var(--lf-focus) !important;
+}
+.bootstrap-select > .dropdown-toggle:disabled {
+  background-color: var(--lf-subtle) !important;
+  color: var(--lf-gray) !important;
+  border-color: var(--lf-line) !important;
+  cursor: not-allowed;
 }
 .bootstrap-select .filter-option-inner-inner { color: inherit; }
 
@@ -324,10 +356,15 @@ select option { color: var(--lf-ink); background-color: var(--lf-surface); }
 .bootstrap-select .dropdown-menu li a:hover,
 .bootstrap-select .dropdown-menu li a:focus,
 .bootstrap-select .dropdown-menu li a.active,
-.bootstrap-select .dropdown-menu li.active a,
+.bootstrap-select .dropdown-menu li.active a {
+  background-color: var(--lf-control-hover-bg) !important;
+  color: var(--lf-ink) !important;
+}
+.bootstrap-select .dropdown-menu li.selected a,
 .bootstrap-select .dropdown-menu li.selected.active a {
-  background-color: var(--lf-btn-bg) !important;
-  color: var(--lf-btn-text) !important;
+  background-color: var(--lf-control-selected-bg) !important;
+  color: var(--lf-ink) !important;
+  box-shadow: inset 3px 0 0 var(--lf-control-selected-border);
 }
 .bootstrap-select .dropdown-menu li a.disabled,
 .bootstrap-select .dropdown-menu .bs-title-option { color: var(--lf-gray) !important; }
@@ -337,7 +374,7 @@ select option { color: var(--lf-ink); background-color: var(--lf-surface); }
 .checkbox-item label::before,
 .radio-item label::before,
 .privacy .checkbox-item label::before {
-  border-color: var(--lf-gray) !important;
+  border-color: var(--lf-control-border) !important;
   background-color: var(--lf-surface) !important;
 }
 .checkbox-item input[type="checkbox"]:checked + label::before,
@@ -360,8 +397,42 @@ input[type="checkbox"]:checked::after,
 .checkbox-item input[type="checkbox"]:checked + label { color: var(--lf-ink) !important; }
 .checkbox-item input[type="checkbox"]:focus-visible + label::before,
 .radio-item input[type="radio"]:focus-visible + label::before {
-  box-shadow: 0 0 0 3px var(--lf-focus) !important;
+  box-shadow: 0 0 0 3px var(--lf-control-hover-bg), 0 0 0 5px var(--lf-focus) !important;
 }
+
+/* Antwortzeilen bekommen einen gemeinsamen Hover-, Fokus- und Auswahlzustand. */
+:where(.checkbox-item, .radio-item) {
+  border: 1px solid var(--lf-line);
+  border-radius: var(--lf-radius);
+  background-color: var(--lf-surface);
+  padding: .5rem .75rem;
+  transition: background-color .15s ease, border-color .15s ease;
+}
+:where(.checkbox-item, .radio-item) label {
+  display: block;
+  width: 100%;
+  margin: 0;
+  cursor: pointer;
+}
+:where(.checkbox-item, .radio-item):hover {
+  background-color: var(--lf-control-hover-bg);
+  border-color: var(--lf-control-border);
+}
+:where(.checkbox-item, .radio-item):focus-within {
+  outline: 3px solid var(--lf-focus);
+  outline-offset: 2px;
+}
+:where(.checkbox-item, .radio-item):has(input[type="checkbox"]:checked),
+:where(.checkbox-item, .radio-item):has(input[type="radio"]:checked) {
+  background-color: var(--lf-control-selected-bg);
+  border-color: var(--lf-control-selected-border);
+}
+:where(.checkbox-item, .radio-item):has(input:disabled) {
+  background-color: var(--lf-subtle);
+  color: var(--lf-gray);
+  border-color: var(--lf-line);
+}
+:where(.checkbox-item, .radio-item):has(input:disabled) label { cursor: not-allowed; }
 .privacy label, .privacy a { color: var(--lf-link); }
 
 li.imageselect-listitem .imageselect-container input.imageselect-checkbox:checked ~ *,
@@ -392,23 +463,49 @@ input.imageselect-checkbox:checked ~ .imageselect-select::after { color: var(--l
   border-radius: var(--lf-radius);
 }
 .alert-danger, .alert-error, .fruity_twentythree .message-box-error {
-  border-left-color: var(--lf-red) !important;
+  border-left-color: var(--lf-error) !important;
 }
 .alert-warning, .fruity_twentythree .message-box-warning {
   border-left-color: var(--lf-link) !important;
 }
-.text-danger, .has-error .help-block, .has-error .control-label { color: var(--lf-link) !important; }
+.text-danger, .has-error .help-block, .has-error .control-label { color: var(--lf-error) !important; }
 .text-success, .text-info, .text-warning,
 .has-success .help-block, .has-success .control-label,
 .has-success .radio, .has-success .checkbox,
 .numeric-multi .ls-group-total .control-label,
 .numeric-multi .dynamic-total.text-success { color: var(--lf-ink) !important; }
-.has-error .form-control { border-color: var(--lf-red) !important; }
+.has-error .form-control,
+.has-error .form-select,
+.form-control[aria-invalid="true"],
+.form-select[aria-invalid="true"] {
+  border-color: var(--lf-error) !important;
+  background-color: var(--lf-error-bg);
+}
 .has-success .form-control, .has-success .form-control:focus {
   box-shadow: none !important;
   border-color: var(--lf-gray) !important;
 }
 .em-function { color: var(--lf-ink) !important; }
+
+/* Lange Fragetexte bleiben gut lesbar; Tabellen und Matrixfragen behalten ihre Breite. */
+.question-title-container,
+.question-text,
+.questionhelp,
+.ls-question-help,
+.form-text {
+  max-width: 72ch;
+}
+.question-text { line-height: 1.5; }
+.questionhelp, .ls-question-help, .form-text { line-height: 1.45; }
+
+label, .form-label, .control-label { line-height: 1.4; }
+
+@media (prefers-reduced-motion: reduce) {
+  .btn, .form-control, .form-select, .bootstrap-select > .dropdown-toggle,
+  :where(.checkbox-item, .radio-item) {
+    transition: none;
+  }
+}
 
 
 /* 9) Tabellen, Karten, Menüs, Sonstiges ================================== */
