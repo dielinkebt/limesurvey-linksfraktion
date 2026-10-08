@@ -401,38 +401,38 @@ input[type="checkbox"]:checked::after,
 }
 
 /* Antwortzeilen bekommen einen gemeinsamen Hover-, Fokus- und Auswahlzustand. */
-:where(.checkbox-item, .radio-item) {
+:where(.checkbox-item, .radio-item):not(td):not(th):not(.imageselect-listitem) {
   border: 1px solid var(--lf-line);
   border-radius: var(--lf-radius);
   background-color: var(--lf-surface);
   padding: .5rem .75rem;
   transition: background-color .15s ease, border-color .15s ease;
 }
-:where(.checkbox-item, .radio-item) label {
+:where(.checkbox-item, .radio-item):not(td):not(th):not(.imageselect-listitem) label {
   display: block;
   width: 100%;
   margin: 0;
   cursor: pointer;
 }
-:where(.checkbox-item, .radio-item):hover {
+:where(.checkbox-item, .radio-item):not(td):not(th):not(.imageselect-listitem):hover {
   background-color: var(--lf-control-hover-bg);
   border-color: var(--lf-control-border);
 }
-:where(.checkbox-item, .radio-item):focus-within {
+:where(.checkbox-item, .radio-item):not(td):not(th):not(.imageselect-listitem):focus-within {
   outline: 3px solid var(--lf-focus);
   outline-offset: 2px;
 }
-:where(.checkbox-item, .radio-item):has(input[type="checkbox"]:checked),
-:where(.checkbox-item, .radio-item):has(input[type="radio"]:checked) {
+:where(.checkbox-item, .radio-item):not(td):not(th):not(.imageselect-listitem):has(input[type="checkbox"]:checked),
+:where(.checkbox-item, .radio-item):not(td):not(th):not(.imageselect-listitem):has(input[type="radio"]:checked) {
   background-color: var(--lf-control-selected-bg);
   border-color: var(--lf-control-selected-border);
 }
-:where(.checkbox-item, .radio-item):has(input:disabled) {
+:where(.checkbox-item, .radio-item):not(td):not(th):not(.imageselect-listitem):has(input:disabled) {
   background-color: var(--lf-subtle);
   color: var(--lf-gray);
   border-color: var(--lf-line);
 }
-:where(.checkbox-item, .radio-item):has(input:disabled) label { cursor: not-allowed; }
+:where(.checkbox-item, .radio-item):not(td):not(th):not(.imageselect-listitem):has(input:disabled) label { cursor: not-allowed; }
 .privacy label, .privacy a { color: var(--lf-link); }
 
 li.imageselect-listitem .imageselect-container input.imageselect-checkbox:checked ~ *,
@@ -500,9 +500,395 @@ input.imageselect-checkbox:checked ~ .imageselect-select::after { color: var(--l
 
 label, .form-label, .control-label { line-height: 1.4; }
 
+
+/* 7b) Fragetypen ========================================================= */
+/* Einheitlicher Rahmen für die sehr unterschiedlichen Antwort-Widgets. */
+.question-container {
+  margin-bottom: 2rem;
+  padding-block: .75rem 1rem;
+  border-bottom: 1px solid var(--lf-line);
+}
+.question-container .question-title-container { margin-bottom: .25rem; }
+.question-container .ls-label-question {
+  font-family: var(--lf-font-head) !important;
+  font-size: clamp(1.15rem, 1.05rem + .4vw, 1.4rem);
+  font-weight: 800 !important;
+  line-height: 1.35;
+}
+.question-container .ls-label-question p {
+  font-family: var(--lf-font-head) !important;
+  font-size: inherit;
+  font-weight: 800 !important;
+  line-height: inherit;
+}
+.question-container .ls-label-question > :last-child { margin-bottom: 0; }
+.question-container .question-help-container,
+.question-container .question-valid-container { max-width: 72ch; }
+.question-container .question-help-container { margin-bottom: .5rem; }
+.question-container .question-valid-container { margin-block: .5rem .75rem; }
+.question-container .asterisk,
+.question-container .ls-question-mandatory { color: var(--lf-error) !important; }
+.question-container.input-error {
+  border-bottom-color: var(--lf-error);
+}
+.question-container.input-error .question-title-container {
+  border-left: 3px solid var(--lf-error);
+  padding-left: .75rem;
+}
+
+/* Einfachauswahl als gut lesbares, responsives Raster. */
+:is(.list-radio, .multiple-opt) .bootstrap-buttons-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: .65rem;
+  margin: 0;
+}
+:is(.list-radio, .multiple-opt) .bootstrap-buttons-list > li {
+  width: auto;
+  max-width: none;
+  flex: initial;
+  padding-inline: 0;
+}
+:is(.list-radio, .multiple-opt) .bootstrap-buttons-list .form-check { padding: 0; }
+:is(.list-radio, .multiple-opt) .bootstrap-buttons-list .btn {
+  display: flex;
+  min-height: 3.25rem;
+  align-items: center;
+  justify-content: center;
+  padding: .75rem 1rem;
+  line-height: 1.35;
+  white-space: normal;
+  text-align: center;
+}
+:is(.list-radio, .multiple-opt) .bootstrap-buttons-list .btn p { margin: 0; }
+
+/* Listenoptionen: volle Zeile, klare Auswahl und einheitliche Abstände. */
+.list-radio .answers-list:not(.bootstrap-buttons-list),
+.multiple-opt .answers-list,
+.multiple-opt-comments .answers-list,
+.list-with-comment .answers-list {
+  display: grid;
+  gap: .5rem;
+}
+.list-radio .answers-list:not(.bootstrap-buttons-list) > .answer-item,
+.multiple-opt .answers-list > .answer-item,
+.multiple-opt-comments .answers-list > .answer-item,
+.list-with-comment .answers-list > .answer-item {
+  margin: 0;
+}
+.multiple-opt .answers-list > .checkbox-text-item,
+.multiple-opt-comments .answers-list > .checkbox-text-item {
+  padding: .5rem .75rem;
+  border: 1px solid var(--lf-line);
+  border-radius: var(--lf-radius);
+  background-color: var(--lf-surface);
+}
+.multiple-opt .othertext-item,
+.multiple-opt-comments .othertext-item,
+.list-with-comment .othertext-item { max-width: 100%; }
+.multiple-opt .other-text-item .form-control,
+.multiple-opt-comments .other-text-item .form-control,
+.list-with-comment .other-text-item .form-control { width: min(100%, 32rem); }
+
+/* Ja/Nein und Geschlecht bleiben als kompakte Einzelauswahl erkennbar. */
+.yes-no .answer-container,
+.gender .answer-container { max-width: 34rem; }
+.yes-no .answer-item.btn,
+.gender .answer-item.btn { min-width: 7rem; min-height: 2.75rem; }
+
+/* Tabellen- und Matrixfragen: Tabellenkopf, Zeilen und Auswahlfelder ordnen. */
+:is(.array-flexible-row, .array-flexible-column, .array-flexible-dual-scale,
+    .array-flexible-duel-scale, .array-10-pt, .array-5-pt,
+    .array-yes-uncertain-no, .array-increase-same-decrease,
+    .array-multi-flexi, .array-multi-flexi-text, .array-texts, .array-numbers,
+    .choice-5-pt-radio) table.ls-answers {
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  border: 1px solid var(--lf-line);
+  border-radius: var(--lf-radius);
+}
+:is(.array-flexible-row, .array-flexible-column, .array-flexible-dual-scale,
+    .array-flexible-duel-scale, .array-10-pt, .array-5-pt,
+    .array-yes-uncertain-no, .array-increase-same-decrease,
+    .array-multi-flexi, .array-multi-flexi-text, .array-texts, .array-numbers,
+    .choice-5-pt-radio) table.ls-answers thead th {
+  padding: .75rem .5rem;
+  background-color: var(--lf-subtle);
+  color: var(--lf-ink);
+  border-bottom: 1px solid var(--lf-line);
+  font-weight: 600;
+  vertical-align: middle;
+}
+:is(.array-flexible-row, .array-flexible-column, .array-flexible-dual-scale,
+    .array-flexible-duel-scale, .array-10-pt, .array-5-pt,
+    .array-yes-uncertain-no, .array-increase-same-decrease,
+    .array-multi-flexi, .array-multi-flexi-text, .array-texts, .array-numbers,
+    .choice-5-pt-radio) table.ls-answers tbody th {
+  padding: .75rem;
+  background-color: var(--lf-surface);
+  color: var(--lf-ink);
+  font-weight: 600;
+  text-align: start;
+}
+:is(.array-flexible-row, .array-flexible-column, .array-flexible-dual-scale,
+    .array-flexible-duel-scale, .array-10-pt, .array-5-pt,
+    .array-yes-uncertain-no, .array-increase-same-decrease,
+    .array-multi-flexi, .array-multi-flexi-text, .array-texts, .array-numbers,
+    .choice-5-pt-radio) table.ls-answers tbody td {
+  padding: .5rem;
+  border-bottom: 1px solid var(--lf-line);
+  vertical-align: middle;
+}
+:is(.array-flexible-row, .array-flexible-column, .array-flexible-dual-scale,
+    .array-flexible-duel-scale, .array-10-pt, .array-5-pt,
+    .array-yes-uncertain-no, .array-increase-same-decrease,
+    .array-multi-flexi, .array-multi-flexi-text, .array-texts, .array-numbers,
+    .choice-5-pt-radio) table.ls-answers tbody tr:last-child > * { border-bottom: 0; }
+table.ls-answers td.radio-item,
+table.ls-answers td.checkbox-item {
+  min-width: 2.75rem;
+  padding: .4rem !important;
+  text-align: center;
+}
+table.ls-answers td.radio-item:has(input:checked),
+table.ls-answers td.checkbox-item:has(input:checked) {
+  background-color: var(--lf-control-selected-bg) !important;
+  box-shadow: inset 0 -3px 0 var(--lf-control-selected-border);
+}
+table.ls-answers td.radio-item:focus-within,
+table.ls-answers td.checkbox-item:focus-within {
+  outline: 2px solid var(--lf-focus);
+  outline-offset: -3px;
+}
+
+/* Rangfolge und Sortierlisten als eigenständige, griffige Karten. */
+.select-sortable-lists .sortable-list,
+.ranking-advanced-style .sortable-list { border: 0; }
+.select-sortable-lists .ranking-available-items,
+.ranking-advanced-style .ranking-advanced-available-items {
+  padding: .75rem;
+  background-color: var(--lf-subtle);
+  border: 1px solid var(--lf-line);
+  border-radius: var(--lf-radius);
+}
+.select-sortable-lists .ranking-sorted-items,
+.ranking-advanced-style .ranking-advanced-sorted-items {
+  min-height: 8rem;
+  padding: .75rem;
+  background-color: var(--lf-control-hover-bg);
+  border: 1px dashed var(--lf-control-border);
+  border-radius: var(--lf-radius);
+}
+.select-sortable-lists .sortable-item,
+.ranking-advanced-style .sortable-item {
+  min-height: 2.75rem;
+  margin-block: .4rem;
+  padding: .65rem .8rem;
+  background-color: var(--lf-surface) !important;
+  color: var(--lf-ink) !important;
+  border: 1px solid var(--lf-control-border) !important;
+  border-radius: var(--lf-radius);
+  line-height: 1.4;
+  cursor: grab;
+  transition: background-color .15s ease, border-color .15s ease;
+}
+.select-sortable-lists .sortable-item:hover,
+.ranking-advanced-style .sortable-item:hover {
+  background-color: var(--lf-control-hover-bg) !important;
+  border-color: var(--lf-link) !important;
+}
+.select-sortable-lists .ranking-sorted-items .sortable-item,
+.ranking-advanced-style .ranking-advanced-sorted-items .sortable-item {
+  border-color: var(--lf-control-selected-border) !important;
+}
+.ranking-advanced-style .sortable-rank {
+  min-height: 2.75rem;
+  background-color: var(--lf-surface);
+  border: 1px solid var(--lf-line) !important;
+  border-radius: var(--lf-radius);
+}
+.ranking-advanced-style .sortable-rank .selector__index_row,
+.ranking-advanced-style .sortable-rank .selector__dragHandle,
+.ranking-advanced-style .ranking-advanced-sorted-items .selector__index_row,
+.ranking-advanced-style .ranking-advanced-sorted-items .selector__dragHandle {
+  color: var(--lf-link) !important;
+}
+.ranking-advanced-style .ranking-advanced-available-items .sortable-rank-subtitle,
+.ranking-advanced-style .ranking-advanced-sorted-items .sortable-rank-subtitle {
+  color: var(--lf-ink);
+  font-weight: 600;
+}
+
+/* Numerische Antworten und Schieberegler. */
+.numeric .answer-container .form-control,
+.date .answer-container .form-control,
+.date-time .answer-container .form-control,
+.time .answer-container .form-control { max-width: 18rem; }
+.list-dropdown .answer-container .bootstrap-select { width: min(100%, 38rem); }
+.numeric-multi .question-item:not(.slider-item) .form-control { max-width: 18rem; }
+.numeric-multi .slider-item { max-width: 48rem; }
+.numeric-multi .slider .slider-track,
+.slider-list .slider .slider-track {
+  background-color: var(--lf-line) !important;
+  border-radius: 999px;
+  box-shadow: none;
+}
+.numeric-multi .slider .slider-selection,
+.slider-list .slider .slider-selection {
+  background: var(--lf-control) !important;
+  box-shadow: none;
+}
+.numeric-multi .slider .slider-handle:not(.custom),
+.slider-list .slider .slider-handle:not(.custom) {
+  width: 1.35rem;
+  height: 1.35rem;
+  background: var(--lf-surface) !important;
+  border: 3px solid var(--lf-control) !important;
+  box-shadow: 0 1px 4px rgb(0 0 0 / .2);
+}
+.numeric-multi .slider .slider-handle:focus-visible,
+.slider-list .slider .slider-handle:focus-visible {
+  outline: 3px solid var(--lf-focus) !important;
+  outline-offset: 3px;
+}
+.numeric-multi .slider .tooltip-inner,
+.slider-list .slider .tooltip-inner {
+  background-color: var(--lf-darkred);
+  color: #fff;
+  border-radius: var(--lf-radius);
+}
+.numeric-multi .slider .tooltip-arrow { border-top-color: var(--lf-darkred); }
+
+/* Textfelder, Kurztexte, zusammengesetzte Eingaben und Textanzeigen. */
+.text-short .answer-container input.form-control,
+.multiple-short-txt .answer-container input.form-control,
+.multiple-opt-comments .answer-container input.form-control,
+.list-with-comment .answer-container input.form-control {
+  max-width: 38rem;
+}
+.text-long .answer-container textarea.form-control,
+.text-huge .answer-container textarea.form-control {
+  width: 100%;
+  max-width: 48rem;
+  min-height: 9rem;
+  line-height: 1.5;
+  resize: vertical;
+}
+.multiple-short-txt .answer-container .question-item,
+.numeric-multi .answer-container .question-item:not(.slider-item) {
+  padding-block: .5rem;
+  border-bottom: 1px solid var(--lf-line);
+}
+.multiple-short-txt .answer-container .question-item:last-child,
+.numeric-multi .answer-container .question-item:last-child { border-bottom: 0; }
+.boilerplate .answer-container,
+.text-display .answer-container {
+  max-width: 72ch;
+  padding: 1rem 1.25rem;
+  background-color: var(--lf-subtle);
+  border-left: 3px solid var(--lf-control-selected-border);
+  border-radius: 0 var(--lf-radius) var(--lf-radius) 0;
+  line-height: 1.6;
+}
+.equation .answer-container output,
+.equation .answer-container .form-control-plaintext,
+.equation .answer-container .form-control-static {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  padding: .5rem .75rem;
+  background-color: var(--lf-subtle);
+  border: 1px solid var(--lf-line);
+  border-radius: var(--lf-radius);
+  font-weight: 600;
+}
+
+/* Bildauswahl und Uploads bewahren ihre Inhalte, bekommen aber klare Rahmen. */
+.imageselect-listitem .imageselect-container,
+.question-container.image-select .answer-item,
+.question-container.multiple-image-select .answer-item {
+  border: 1px solid var(--lf-line);
+  border-radius: var(--lf-radius);
+  background-color: var(--lf-surface);
+  transition: border-color .15s ease, background-color .15s ease;
+}
+.imageselect-listitem:hover .imageselect-container,
+.question-container.image-select .answer-item:hover,
+.question-container.multiple-image-select .answer-item:hover {
+  border-color: var(--lf-link);
+  background-color: var(--lf-control-hover-bg);
+}
+.imageselect-listitem:focus-within .imageselect-container,
+.question-container.image-select .answer-item:focus-within,
+.question-container.multiple-image-select .answer-item:focus-within {
+  outline: 3px solid var(--lf-focus);
+  outline-offset: 2px;
+}
+.imageselect-listitem:has(input:checked) .imageselect-container,
+.question-container.image-select .answer-item:has(input:checked),
+.question-container.multiple-image-select .answer-item:has(input:checked) {
+  border-color: var(--lf-control-selected-border);
+  background-color: var(--lf-control-selected-bg);
+}
+.file-upload .file-preview,
+.upload-files .file-preview,
+.file-upload .uploadedfiles,
+.upload-files .uploadedfiles,
+.question-container .file-preview,
+.question-container .uploadedfiles {
+  padding: .75rem;
+  background-color: var(--lf-subtle);
+  border: 1px solid var(--lf-line);
+  border-radius: var(--lf-radius);
+}
+.file-upload input[type="file"]::file-selector-button,
+.upload-files input[type="file"]::file-selector-button,
+.question-container input[type="file"].form-control::file-selector-button {
+  margin: -.375rem .75rem -.375rem -.75rem;
+  margin-inline-end: .75rem;
+  padding: .375rem .75rem;
+  color: var(--lf-btn-text);
+  background-color: var(--lf-btn-bg);
+  border: 0;
+  border-radius: var(--lf-radius);
+}
+.file-upload input[type="file"]::file-selector-button:hover,
+.upload-files input[type="file"]::file-selector-button:hover,
+.question-container input[type="file"].form-control::file-selector-button:hover { background-color: var(--lf-btn-bg-hover); }
+
+/* Date-/Zeit-Picker und gezeichnete Karten nur am äußeren Rand gestalten. */
+.tempus-dominus-widget {
+  background-color: var(--lf-surface) !important;
+  color: var(--lf-ink);
+  border: 1px solid var(--lf-line);
+  border-radius: var(--lf-radius);
+  box-shadow: 0 .5rem 1.25rem rgb(0 0 0 / .12);
+}
+.tempus-dominus-widget .date-container-days div:not(.no-highlight):hover,
+.tempus-dominus-widget .date-container-months div:not(.no-highlight):hover,
+.tempus-dominus-widget .date-container-years div:not(.no-highlight):hover {
+  background-color: var(--lf-control-hover-bg);
+  color: var(--lf-ink);
+}
+.tempus-dominus-widget .active,
+.tempus-dominus-widget .date-container-days div.active {
+  background-color: var(--lf-btn-bg) !important;
+  color: var(--lf-btn-text) !important;
+}
+.question-container.map .answer-container,
+.question-container.map-browsing .answer-container,
+.question-container.browser-detection .answer-container {
+  overflow: hidden;
+  border: 1px solid var(--lf-line);
+  border-radius: var(--lf-radius);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .btn, .form-control, .form-select, .bootstrap-select > .dropdown-toggle,
-  :where(.checkbox-item, .radio-item) {
+  :where(.checkbox-item, .radio-item),
+  .select-sortable-lists .sortable-item, .ranking-advanced-style .sortable-item,
+  .imageselect-listitem .imageselect-container {
     transition: none;
   }
 }
@@ -642,8 +1028,6 @@ body.error-page .error-link { font-size: inherit; line-height: inherit; color: v
 
   .form-control, .form-select { border-color: var(--lf-gray); }
 
-  /* Eltern-Theme setzt Textfarben fest (#1E1E1E, #152536 …):
-     Spezifität 0 + !important → schlägt Theme-Regeln, verliert gegen unsere !important-Regeln */
   :where(body, main, article, section, div, p, span, ul, ol, li, dl, dt, dd,
          td, th, label, legend, small, strong, b, em, i, blockquote, caption,
          summary, output, h1, h2, h3, h4, h5, h6):not(:where(
