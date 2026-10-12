@@ -237,7 +237,7 @@ body:not(.error-page) .container-fluid {
   box-shadow: none !important;
 }
 .navbar-brand img, .navbar-brand svg, .logo-container .logo {
-  height: 2.65rem;
+  height: 4rem;
   max-height: none;
   width: auto;
 }
@@ -1333,7 +1333,7 @@ body.error-page .error-link { font-size: inherit; line-height: inherit; color: v
      die Lesespaltenbreite selbst wird weiter über --lf-container-width begrenzt. */
   body:not(.error-page) { padding-top: 4.5rem; }
   #survey-nav { min-height: 3.8rem; }
-  #survey-nav .navbar-brand img { height: 2.35rem; }
+  #survey-nav .navbar-brand img { height: 4rem; }
   .lf-header-progress { top: 3.8rem; }
   body:not(.error-page) .outerframe { padding-block: 2.25rem 3rem; }
   .question-container { margin-bottom: 2.75rem; }
