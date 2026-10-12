@@ -2,11 +2,28 @@
    Die Linke im Bundestag – LimeSurvey-Theme (Basis: Fruity TwentyThree)
    ========================================================================== */
 
+/*
+ * Dieses Stylesheet gestaltet das Fruity-TwentyThree-Theme, ohne die von
+ * LimeSurvey erzeugte HTML-Struktur zu ersetzen. Viele Selektoren beziehen
+ * sich daher auf LimeSurvey-Klassen wie .question-container und
+ * .answer-container sowie auf Bootstrap-Komponenten.
+ *
+ * Anpassungshinweise:
+ * - Farben, Schriftfamilien, Radien und Standardmaße zuerst in :root ändern.
+ * - Die folgenden Abschnitte sind nach sichtbaren Bereichen und Fragetypen
+ *   geordnet; mobile und reduzierte Animationen stehen bei den jeweiligen
+ *   Layoutregeln.
+ * - Einzelne !important-Deklarationen setzen hoch priorisierte Fruity- oder
+ *   Bootstrap-Standardregeln außer Kraft.
+ */
+
 
 /* 1) Design-Tokens ======================================================= */
 :root {
-  color-scheme: light dark;
+  color-scheme: light;
 
+  /* Markenfarben und neutrale Flächen: Rot für Akzente, Dunkelrot für
+     Links, Bedienelemente und Aktionen; Text bleibt nahezu schwarz. */
   --lf-red: #FF0000;
   --lf-darkred: #6F003C;
   --lf-ink: #1E1E1E;
@@ -23,6 +40,8 @@
   --lf-error: #B42318;
   --lf-error-bg: #FEF3F2;
 
+  /* Gemeinsame Farben für Links, Fokus, Interaktion und Fortschritt.
+     Hover- und Auswahlzustände bleiben von der Grundpalette abgeleitet. */
   --lf-link: var(--lf-darkred);
   --lf-link-hover: #4A0027;
   --lf-control: var(--lf-darkred);
@@ -32,10 +51,19 @@
   --lf-focus: var(--lf-red);
   --lf-progress: var(--lf-red);
 
-  --lf-radius: 6px;
+  /* Wiederverwendbare Maße für Karten, Lesespalte und Eingaben. */
+  --lf-radius: 10px;
+  --lf-container-width: 58rem;
+  --lf-copy-width: 48rem;
+  --lf-control-height: 3.2rem;
+  --lf-choice-height: 3.4rem;
+
+  /* Inter für Fließtext und Bedienelemente; Work Sans für Überschriften. */
   --lf-font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   --lf-font-head: "Work Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
 
+  /* Bootstrap-Variablen auf die Theme-Tokens abbilden, damit auch
+     unveränderte Bootstrap-Komponenten dieselbe Farb- und Schriftbasis nutzen. */
   --bs-body-font-family: var(--lf-font-body);
   --bs-body-color: var(--lf-ink);
   --bs-body-bg: var(--lf-bg);
@@ -47,36 +75,9 @@
   --bs-border-radius: var(--lf-radius);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --lf-ink: #F2F2F2;
-    --lf-gray: #B8B8B8;
-    --lf-line: #333333;
-    --lf-bg: #121212;
-    --lf-surface: #1B1B1B;
-    --lf-subtle: #1F1F1F;
-    --lf-placeholder: #9A9A9A;
-    --lf-control-border: #8A8A8A;
-    --lf-control-hover-bg: #292126;
-    --lf-control-selected-bg: #351B29;
-    --lf-control-selected-border: #FF7AB0;
-    --lf-error: #FF867C;
-    --lf-error-bg: #351C1B;
-
-    --lf-link: #FF7AB0;
-    --lf-link-hover: #FFA6CB;
-    --lf-control: #8F1A56;
-    --lf-btn-bg: #8F1A56;
-    --lf-btn-bg-hover: #A82166;
-    --lf-btn-text: #FFFFFF;
-
-    --bs-primary: #8F1A56;
-    --bs-primary-rgb: 143, 26, 86;
-  }
-}
-
-
 /* 2) Typografie ========================================================== */
+/* Body-Selektoren schließen Formular- und Menütexte ein, deren Schrift
+   Fruity teilweise direkt an Komponenten statt am body definiert. */
 body,
 body p, body li, body td, body th, body label, body a,
 body input, body select, body textarea, body button,
@@ -87,13 +88,16 @@ body .btn, body .dropdown-menu, body .form-control, body .form-select {
 body {
   font-weight: 400;
   color: var(--lf-ink);
-  background-color: var(--lf-bg);
+  background-color: var(--lf-subtle);
   -webkit-font-smoothing: antialiased;
 }
 
-/* Fließtext bleibt 400, auch wenn ein Wrapper-Element Gewicht vererbt */
+/* Fließtext bleibt 400, auch wenn ein Wrapper-Element ein kräftigeres
+   Schriftgewicht vererbt. :where() hält die Selektorspezifität gering. */
 :where(p, li, dd, blockquote) { font-weight: 400; }
 
+/* Überschriften behalten Work Sans Black unabhängig davon, ob LimeSurvey
+   ein semantisches h-Element oder eine Theme-Klasse rendert. */
 h1, h2, h3, h4, h5, h6,
 .h1, .h2, .h3, .h4, .h5, .h6,
 .large-heading, .survey-name, .group-title, .group-name,
@@ -107,7 +111,8 @@ h1, h2, h3, h4, h5, h6,
   color: var(--lf-ink);
 }
 
-/* Überschriften-Skala (bewusste Abweichung von Fruity: h2 = Fließtextgröße) */
+/* Responsive Typografieskala. clamp() begrenzt die Größe zwischen einem
+   gut lesbaren Minimum und Maximum; die Werte dazwischen wachsen mit dem Viewport. */
 h1, .h1 { font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.5rem); line-height: 1.15; }
 h2, .h2 { font-size: clamp(1.4rem, 1.2rem + 0.7vw, 1.9rem);  line-height: 1.2; }
 h3, .h3 { font-size: 1.3rem;  line-height: 1.25; }
@@ -121,20 +126,56 @@ h5, .h5, h6, .h6 { font-size: 1rem; line-height: 1.4; }
   line-height: 1.15;
   margin: 0 0 1rem;
 }
-.group-container .group-title {
-  font-size: clamp(1.4rem, 1.2rem + 0.7vw, 1.9rem);
-  line-height: 1.2;
-}
 .quotamessage { font-size: 1.5rem; line-height: 1.25; }
+
+/* Ein gemeinsames Lesemaß verhindert überlange Zeilen bei Survey-Titel,
+   Einführung, Gruppentexten und Beschreibung. */
+.survey-name, .survey-welcome, .group-container,
+.group-description, .survey-description, .survey-question-help {
+  width: 100%;
+  max-width: var(--lf-copy-width);
+  margin-inline: auto;
+  box-sizing: border-box;
+}
+.survey-name {
+  margin-bottom: 2rem;
+  font-size: clamp(2rem, 1.2rem + 2.8vw, 3.4rem);
+  line-height: 1.04;
+  letter-spacing: -.04em;
+}
+.survey-welcome { margin-bottom: 2rem; line-height: 1.7; }
+.group-container { padding-inline: 0; }
+.group-title, .group-name {
+  width: 100%;
+  margin: 0 0 2.25rem;
+  font-size: clamp(1.7rem, 1.25rem + 1.5vw, 2.35rem);
+  line-height: 1.12;
+  letter-spacing: -.025em;
+  box-sizing: border-box;
+}
+/* LimeSurvey rendert die Beschreibung je nach View entweder mit beiden
+   Klassen am selben Element oder mit .form-heading als Kindelement. Beide
+   Varianten werden auf die Lesespalte begrenzt und horizontal zentriert. */
+.survey-description { width: 100%; }
+.survey-description.form-heading,
+.survey-description .form-heading {
+  width: 100% !important;
+  max-width: var(--lf-copy-width);
+  margin-inline: auto !important;
+  box-sizing: border-box;
+}
 
 .completed-wrapper .completed-Content { color: var(--lf-ink); }
 
+/* Überschriften und Labels dürfen stärker sein; Inter wird maximal mit 600
+   verwendet, während Fließtext und Optionen normalgewichtig bleiben. */
 strong, b, th, label, .form-label, .control-label { font-weight: 600 !important; }  /* Inter max. 600 */
 label, .control-label, dl, dl dt { color: var(--lf-ink); }
 
 .text-muted, .help-block, .ls-question-help, .form-text { color: var(--lf-gray) !important; }
 .ls-answers th, .ls-answers .ls-heading th { color: var(--lf-gray); }
 
+/* Links sind unterstrichen, damit sie auch ohne Farbe als Links erkennbar sind. */
 a {
   color: var(--lf-link);
   text-decoration-thickness: 1px;
@@ -144,6 +185,7 @@ a:hover, a:focus { color: var(--lf-link-hover); }
 .btn-link, .link-primary { color: var(--lf-link) !important; }
 .btn-link:hover, .btn-link:focus { color: var(--lf-link-hover) !important; }
 
+/* Deutlicher Tastaturfokus für interaktive Elemente. */
 :focus-visible {
   outline: 3px solid var(--lf-focus) !important;
   outline-offset: 2px;
@@ -151,7 +193,9 @@ a:hover, a:focus { color: var(--lf-link-hover); }
 
 
 /* 3) Layout ============================================================== */
-/* Abstände kommen von Fruity (.question-container, .space-col …) */
+/* Seitenlayout: Fruity behält die Abstände einzelner Fragen; hier werden
+   Dokumenthöhe, allgemeine Surveybreite und der äußere Seitenabstand gesetzt. */
+html { scroll-behavior: smooth; }
 body {
   display: flex;
   flex-direction: column;
@@ -159,22 +203,43 @@ body {
   padding-bottom: 0;
 }
 body > article, body > main, body > .outerframe { flex: 1; }
+body:not(.error-page) { padding-top: 5rem; }
+body:not(.error-page) .outerframe,
+body:not(.error-page) .survey-container,
+body:not(.error-page) #survey-content {
+  width: min(100% - 2rem, var(--lf-container-width));
+  max-width: var(--lf-container-width);
+  margin-inline: auto;
+}
+/* Eigene Maximalbreite statt der wechselnden Bootstrap-Containerbreiten.
+   So bleibt die Surveyfläche auf großen Viewports genauso breit wie auf
+   mittleren; ein schmaler Seitenrand bleibt auf kleinen Geräten erhalten. */
+body:not(.error-page) .outerframe { padding-block: clamp(2.5rem, 8vh, 6rem) 4rem; }
+/* Die Container innerhalb des äußeren Rahmens dürfen dessen Breite nicht
+   erneut anhand der Bootstrap-Breakpoints verkleinern. */
+body:not(.error-page) .outerframe > .container,
+body:not(.error-page) .outerframe > .container-md,
+body:not(.error-page) .outerframe > .container-fluid,
+body:not(.error-page) .outerframe .container-md,
+body:not(.error-page) .container,
+body:not(.error-page) .container-fluid {
+  width: 100%;
+  max-width: 100%;
+}
 
 
 /* 4) Header / Logo ======================================================= */
+/* Headerfläche und Logo: die Höhe des Logos wird hier zentral festgelegt;
+   .lf-logo bleibt für separat gerenderte Logos verfügbar. */
 .navbar {
   background: var(--lf-bg) !important;
   border-bottom: 0 !important;
   box-shadow: none !important;
 }
 .navbar-brand img, .navbar-brand svg, .logo-container .logo {
-  height: 3.5rem;      /* vorher ca. 28 px effektiv, jetzt 56 px */
+  height: 2.65rem;
   max-height: none;
   width: auto;
-}
-
-@media (max-width: 576px) {
-  .navbar-brand img, .navbar-brand svg, .logo-container .logo { height: 3rem; }
 }
 
 #survey-nav .navbar-toggler .ri-more-fill { color: var(--lf-gray); }
@@ -186,39 +251,85 @@ body > article, body > main, body > .outerframe { flex: 1; }
 .lf-header-progress .ls-progress-container { height: 100%; }
 .lf-header-progress .ls-progress-container:focus-visible { outline-offset: 0; }
 
+/* Schmale Navigationsleiste mit fest positionierter Fortschrittslinie.
+   Die Höhe der Linie orientiert sich an der Desktop-Navigationsleiste und
+   wird im mobilen Breakpoint weiter unten angepasst. */
+#survey-nav {
+  min-height: 4.25rem;
+  padding: .55rem clamp(1rem, 4vw, 3rem);
+  background: var(--lf-bg) !important;
+  border-bottom: 1px solid var(--lf-line) !important;
+}
+#survey-nav > .container-fluid { max-width: 76rem; }
+#survey-nav .navbar-brand { margin: 0; padding: .25rem 0; }
+#navbar-toggler {
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid var(--lf-line);
+  border-radius: 50%;
+  color: var(--lf-ink);
+  background: var(--lf-bg);
+}
+#navbar-toggler:hover { border-color: var(--lf-control); color: var(--lf-control); }
+
+.lf-header-progress {
+  position: fixed;
+  z-index: 1031;
+  inset: 4.2rem 0 auto;
+  height: 4px;
+  background: var(--lf-line);
+}
+.lf-header-progress .progress {
+  height: 4px;
+  overflow: visible;
+  background: transparent;
+  border-radius: 0;
+}
+.lf-header-progress .progress-bar {
+  border-radius: 0 999px 999px 0;
+  transition: width .45s cubic-bezier(.2,.75,.25,1);
+}
+
 
 /* 5) Buttons ============================================================= */
+/* Gemeinsame Rundung und kurze Farbübergänge für Schaltflächen und Felder. */
 .btn { border-radius: var(--lf-radius); font-weight: 600 !important; }
 .btn, .form-control, .form-select, .bootstrap-select > .dropdown-toggle {
   transition: color .15s ease, background-color .15s ease, border-color .15s ease;
 }
 
+/* Bootstrap-Schatten nicht zusätzlich zum eigenen Fokus- und Zustandsstil
+   anzeigen. Der sichtbare Tastaturfokus kommt über :focus-visible oben. */
 .btn:hover, .btn:focus, .btn:active, .btn.active,
 .btn-check:focus + .btn, .btn-check:checked + .btn:focus {
   box-shadow: none !important;
 }
 
-/* Aktionsbuttons (Weiter, Absenden …) */
-a.btn-primary, button.btn-primary, input.btn-primary {
+/* Primäre Survey-Aktionen wie „Weiter“ oder „Absenden“: gefüllte Pillenform,
+   dunklerer Hoverzustand und klar entsättigtes deaktiviertes Aussehen. */
+.btn-primary {
   background-color: var(--lf-btn-bg) !important;
   border-color: var(--lf-btn-bg) !important;
   color: var(--lf-btn-text) !important;
+  min-height: 3rem;
+  padding: .7rem 1.35rem;
+  border-radius: 999px !important;
+  box-shadow: 0 3px 10px rgb(111 0 60 / .16);
+  transition: box-shadow .15s ease, background-color .15s ease;
 }
-a.btn-primary:hover, button.btn-primary:hover, input.btn-primary:hover,
-a.btn-primary:focus, button.btn-primary:focus, input.btn-primary:focus,
-a.btn-primary:active, button.btn-primary:active, input.btn-primary:active,
-.btn-primary.active {
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active {
   background-color: var(--lf-btn-bg-hover) !important;
   border-color: var(--lf-btn-bg-hover) !important;
   color: var(--lf-btn-text) !important;
 }
-button.btn-primary:disabled, a.btn-primary.disabled, input.btn-primary:disabled {
+.btn-primary:disabled, .btn-primary.disabled {
   background-color: var(--lf-line) !important;
   border-color: var(--lf-line) !important;
   color: var(--lf-gray) !important;
   opacity: 1;
 }
 
+/* Sekundäre primäre Aktion: zunächst transparent, beim Aktivieren gefüllt. */
 .btn-outline-primary {
   color: var(--lf-link) !important;
   border-color: var(--lf-link) !important;
@@ -231,6 +342,7 @@ button.btn-primary:disabled, a.btn-primary.disabled, input.btn-primary:disabled 
   color: var(--lf-btn-text) !important;
 }
 
+/* Weniger wichtige Aktionen behalten einen neutralen Rahmen. */
 .btn-outline-secondary, .btn-secondary, .btn-default {
   background-color: transparent;
   color: var(--lf-ink);
@@ -243,7 +355,8 @@ button.btn-primary:disabled, a.btn-primary.disabled, input.btn-primary:disabled 
   color: var(--lf-link);
 }
 
-/* Umschalt-Buttons (Ja/Nein, Geschlecht, .btn-check) */
+/* Umschalt-Buttons, etwa Ja/Nein- oder Geschlechtsantworten:
+   unchecked = neutraler Rahmen, checked = Markenfarbe mit weißem Text. */
 .btn-check:not(:checked) + .btn-primary,
 .btn-check:not(:checked) + .btn {
   background-color: transparent !important;
@@ -270,13 +383,18 @@ button.btn-primary:disabled, a.btn-primary.disabled, input.btn-primary:disabled 
 
 
 /* 6) Formularfelder ====================================================== */
-/* Maße (Padding, Höhe, Zeilenhöhe) bleiben bei Fruity */
+/* Text-, Zahlen- und native Select-Felder teilen dieselbe Höhe, Innenabstände,
+   Grundfarbe und Rundung. Die Varianten für Spezialfelder folgen weiter unten. */
 .form-control, .form-select {
+  min-height: var(--lf-control-height);
+  padding: .75rem 1rem;
   background-color: var(--lf-surface);
   color: var(--lf-ink);
   border: 1px solid var(--lf-control-border);
   border-radius: var(--lf-radius);
 }
+/* Interaktionszustände: Hover hebt den Rahmen hervor, Fokus verwendet den
+   roten Markenindikator, disabled und readonly erhalten eine ruhige Fläche. */
 .form-control:hover:not(:disabled):not([readonly]),
 .form-select:hover:not(:disabled) {
   border-color: var(--lf-link);
@@ -300,10 +418,12 @@ button.btn-primary:disabled, a.btn-primary.disabled, input.btn-primary:disabled 
   border-color: var(--lf-line) !important;
   cursor: text;
 }
+/* LimeSurvey markiert Pflichtfelder teils mit einer eigenen Klasse. */
 .form-control.ls-important-field {
   border-color: var(--lf-ink) !important;
   box-shadow: none !important;
 }
+/* Anhänge wie Einheiten oder Symbole bleiben visuell Teil der Eingabegruppe. */
 .input-group-text, label .input-group-text, .input-group-addon {
   background-color: var(--lf-subtle) !important;
   color: var(--lf-ink) !important;
@@ -312,22 +432,60 @@ button.btn-primary:disabled, a.btn-primary.disabled, input.btn-primary:disabled 
 .form-change-lang #language-changer-select,
 .form-change-lang #lang-select::after { color: var(--lf-link) !important; }
 
+/* Optionstexte einfacher HTML-Selects erhalten lesbare Farben, soweit der
+   Browser die native Dropdown-Darstellung über CSS steuern lässt. */
 select option { color: var(--lf-ink); background-color: var(--lf-surface); }
 
 
 /* 6b) bootstrap-select (Dropdown-Fragen) ================================ */
-/* Nur Farben, Rahmen, Radius. Maße und Abstände bleiben bei Fruity. */
+/* LimeSurvey ersetzt viele Selects durch bootstrap-select. Der äußere Wrapper
+   bleibt transparent; die sichtbare Schaltfläche übernimmt die Feldgestaltung. */
 .bootstrap-select,
 .bootstrap-select.form-control { max-width: 100%; }
+.bootstrap-select.form-control {
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
 
+/* Feste Höhe und Flex-Ausrichtung halten den ausgewählten Text vertikal mittig.
+   Die festgelegte Höhe verhindert, dass der Button nach einer Auswahl wächst. */
 .bootstrap-select > .dropdown-toggle,
 .bootstrap-select > .dropdown-toggle.btn-light {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  height: var(--lf-control-height);
+  min-height: var(--lf-control-height);
+  padding: .5rem 1rem;
+  line-height: 1.25;
   background-color: var(--lf-surface) !important;
   color: var(--lf-ink) !important;
   border: 1px solid var(--lf-control-border) !important;
   border-radius: var(--lf-radius);
   font-weight: 400;
 }
+/* Bootstrap-select verschachtelt den Anzeigetext in mehreren Wrappern. Alle
+   Ebenen füllen die Buttonhöhe; Flexbox zentriert auch nachträglich eingesetzte
+   Optionstexte. Äußere HTML-Absätze verlieren ihre Standardränder. */
+.bootstrap-select > .dropdown-toggle .filter-option,
+.bootstrap-select > .dropdown-toggle .filter-option-inner {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  min-height: 0;
+}
+.bootstrap-select .filter-option-inner-inner {
+  display: flex;
+  align-items: center;
+  min-height: 100%;
+  color: inherit;
+  line-height: 1.25;
+}
+.bootstrap-select .filter-option-inner-inner > * { margin-block: 0 !important; }
+/* Menüliste: Hover/Fokus und aktuell ausgewählte Option unterscheiden sich
+   durch eine dezente Flächenfarbe und einen schmalen Markenstreifen. */
 .bootstrap-select > .dropdown-toggle:hover {
   background-color: var(--lf-control-hover-bg) !important;
   border-color: var(--lf-link) !important;
@@ -344,8 +502,6 @@ select option { color: var(--lf-ink); background-color: var(--lf-surface); }
   border-color: var(--lf-line) !important;
   cursor: not-allowed;
 }
-.bootstrap-select .filter-option-inner-inner { color: inherit; }
-
 .bootstrap-select .dropdown-menu {
   background-color: var(--lf-surface);
   border: 1px solid var(--lf-line);
@@ -371,6 +527,8 @@ select option { color: var(--lf-ink); background-color: var(--lf-surface); }
 
 
 /* 7) Checkbox / Radio / Bildauswahl / Slider ============================ */
+/* Fruity zeichnet Checkboxen und Radios teilweise über ::before/::after.
+   Diese Regeln ändern nur deren Erscheinungsbild, nicht die Eingabelogik. */
 .checkbox-item label::before,
 .radio-item label::before,
 .privacy .checkbox-item label::before {
@@ -399,14 +557,39 @@ input[type="checkbox"]:checked::after,
 .radio-item input[type="radio"]:focus-visible + label::before {
   box-shadow: 0 0 0 3px var(--lf-control-hover-bg), 0 0 0 5px var(--lf-focus) !important;
 }
+/* In den Karten werden Checkboxenzeichen 18px groß und vertikal zentriert.
+   Textabstand = 1rem, genau wie der Abstand des Zeichens vom Kartenrand. */
+.question-container .checkbox-item:not(td):not(th):not(.imageselect-listitem) label::before,
+.question-container .checkbox-item:not(td):not(th):not(.imageselect-listitem) label::after {
+  top: 50%;
+  left: 0;
+  width: 18px;
+  height: 18px;
+  margin-left: 0;
+  transform: translateY(-50%);
+}
+.question-container .checkbox-item:not(td):not(th):not(.imageselect-listitem) label {
+  padding-left: calc(18px + 1rem);
+}
+.question-container .checkbox-item:not(td):not(th):not(.imageselect-listitem) label::before {
+  border-width: 2px;
+}
+.question-container .checkbox-item:not(td):not(th):not(.imageselect-listitem) label::after {
+  font-size: 15px;
+  line-height: 18px;
+}
 
-/* Antwortzeilen bekommen einen gemeinsamen Hover-, Fokus- und Auswahlzustand. */
+/* Antwortzeilen werden anklickbare Karten. Tabellenzellen und Bildauswahl
+   sind ausgenommen, weil sie ihre eigene Geometrie und Zustände verwenden. */
 :where(.checkbox-item, .radio-item):not(td):not(th):not(.imageselect-listitem) {
+  min-height: var(--lf-choice-height);
+  padding: .8rem 1rem;
   border: 1px solid var(--lf-line);
+  border-color: var(--lf-control-border);
   border-radius: var(--lf-radius);
   background-color: var(--lf-surface);
-  padding: .5rem .75rem;
-  transition: background-color .15s ease, border-color .15s ease;
+  box-shadow: 0 1px 2px rgb(30 30 30 / .04);
+  transition: background-color .15s ease, border-color .15s ease, box-shadow .15s ease;
 }
 :where(.checkbox-item, .radio-item):not(td):not(th):not(.imageselect-listitem) label {
   display: block;
@@ -416,16 +599,17 @@ input[type="checkbox"]:checked::after,
 }
 :where(.checkbox-item, .radio-item):not(td):not(th):not(.imageselect-listitem):hover {
   background-color: var(--lf-control-hover-bg);
-  border-color: var(--lf-control-border);
+  border-color: var(--lf-control);
+  box-shadow: 0 3px 10px rgb(30 30 30 / .07);
 }
 :where(.checkbox-item, .radio-item):not(td):not(th):not(.imageselect-listitem):focus-within {
   outline: 3px solid var(--lf-focus);
   outline-offset: 2px;
 }
-:where(.checkbox-item, .radio-item):not(td):not(th):not(.imageselect-listitem):has(input[type="checkbox"]:checked),
-:where(.checkbox-item, .radio-item):not(td):not(th):not(.imageselect-listitem):has(input[type="radio"]:checked) {
+:where(.checkbox-item, .radio-item):not(td):not(th):not(.imageselect-listitem):has(input:checked) {
   background-color: var(--lf-control-selected-bg);
   border-color: var(--lf-control-selected-border);
+  box-shadow: inset 0 0 0 1px var(--lf-control-selected-border);
 }
 :where(.checkbox-item, .radio-item):not(td):not(th):not(.imageselect-listitem):has(input:disabled) {
   background-color: var(--lf-subtle);
@@ -435,6 +619,9 @@ input[type="checkbox"]:checked::after,
 :where(.checkbox-item, .radio-item):not(td):not(th):not(.imageselect-listitem):has(input:disabled) label { cursor: not-allowed; }
 .privacy label, .privacy a { color: var(--lf-link); }
 
+/* Bildauswahl, Slider, Rangfolge und Fortschritt sind spezialisierte Widgets.
+   Hier werden nur Markenfarben und Rahmen angepasst; ihre Bedienlogik bleibt
+   die des jeweiligen LimeSurvey- oder Bootstrap-Plugins. */
 li.imageselect-listitem .imageselect-container input.imageselect-checkbox:checked ~ *,
 input.imageselect-checkbox:checked ~ .imageselect-select::before { border-color: var(--lf-control) !important; }
 input.imageselect-checkbox:checked ~ .imageselect-select::after { color: var(--lf-control) !important; }
@@ -454,7 +641,9 @@ input.imageselect-checkbox:checked ~ .imageselect-select::after { color: var(--l
 .progress-bar { background-color: var(--lf-progress) !important; }
 
 
-/* 8) Meldungen (ohne Grün/Gelb/Violett) =================================== */
+/* 7b) Meldungen (ohne Grün/Gelb/Violett) ================================== */
+/* Systemmeldungen teilen einen neutralen Rahmen und unterscheiden sich über
+   die linke Akzentkante. Erfolgshinweise behalten lesbaren Standardtext. */
 .alert, .fruity_twentythree .message-box {
   background: transparent;
   color: var(--lf-ink);
@@ -487,7 +676,8 @@ input.imageselect-checkbox:checked ~ .imageselect-select::after { color: var(--l
 }
 .em-function { color: var(--lf-ink) !important; }
 
-/* Lange Fragetexte bleiben gut lesbar; Tabellen und Matrixfragen behalten ihre Breite. */
+/* Lange Fragetexte, Hilfe- und Beschreibungstexte werden auf eine angenehme
+   Zeilenlänge begrenzt. Die Antworttabellen selbst erhalten keine solche Grenze. */
 .question-title-container,
 .question-text,
 .questionhelp,
@@ -501,19 +691,41 @@ input.imageselect-checkbox:checked ~ .imageselect-select::after { color: var(--l
 label, .form-label, .control-label { line-height: 1.4; }
 
 
-/* 7b) Fragetypen ========================================================= */
-/* Einheitlicher Rahmen für die sehr unterschiedlichen Antwort-Widgets. */
+/* 8) Fragetypen ========================================================== */
+/* Gemeinsame Grundregeln für Fragen: viel Abstand zwischen Fragen, aber keine
+   dekorative Außenkarte. So bleibt die Aufmerksamkeit bei der aktuellen Frage
+   und deren Antwortmöglichkeiten. */
 .question-container {
-  margin-bottom: 2rem;
-  padding-block: .75rem 1rem;
-  border-bottom: 1px solid var(--lf-line);
+  margin: 0 0 clamp(2.75rem, 7vh, 5rem);
+  padding: 0;
+  border: 0;
 }
-.question-container .question-title-container { margin-bottom: .25rem; }
+.question-container .question-title-container {
+  width: 100%;
+  max-width: none;
+  margin: 0 0 1.15rem;
+  padding-inline: 0;
+  box-sizing: border-box;
+}
+/* Fruity rendert Titel, Hilfe, Validierung und Antworten als Bootstrap-.col-12.
+   Deren horizontales Gutter würde Inhalt gegenüber dem Fragetitel einrücken;
+   null Innenabstand hält alle direkten Fragebereiche an derselben Kante. */
+.question-container > .col-12,
+.question-container > .question-title-container,
+.question-container > .question-help-container,
+.question-container > .question-valid-container,
+.question-container > .answer-container {
+  padding-inline: 0 !important;
+}
+/* Fragetitel sind kleiner als Gruppentitel, bleiben aber klar als Überschrift
+   erkennbar. max-width begrenzt lange Titel, ohne Antworttabellen zu verengen. */
 .question-container .ls-label-question {
+  max-width: 44rem;
   font-family: var(--lf-font-head) !important;
-  font-size: clamp(1.15rem, 1.05rem + .4vw, 1.4rem);
+  font-size: clamp(1.25rem, 1.05rem + .7vw, 1.75rem);
   font-weight: 800 !important;
-  line-height: 1.35;
+  line-height: 1.2;
+  letter-spacing: -.025em;
 }
 .question-container .ls-label-question p {
   font-family: var(--lf-font-head) !important;
@@ -523,20 +735,16 @@ label, .form-label, .control-label { line-height: 1.4; }
 }
 .question-container .ls-label-question > :last-child { margin-bottom: 0; }
 .question-container .question-help-container,
-.question-container .question-valid-container { max-width: 72ch; }
-.question-container .question-help-container { margin-bottom: .5rem; }
-.question-container .question-valid-container { margin-block: .5rem .75rem; }
+.question-container .question-valid-container {
+  max-width: 72ch;
+  margin-block: .75rem 1rem;
+}
+.question-container .question-help-container { color: var(--lf-gray) !important; }
 .question-container .asterisk,
 .question-container .ls-question-mandatory { color: var(--lf-error) !important; }
-.question-container.input-error {
-  border-bottom-color: var(--lf-error);
-}
-.question-container.input-error .question-title-container {
-  border-left: 3px solid var(--lf-error);
-  padding-left: .75rem;
-}
 
-/* Einfachauswahl als gut lesbares, responsives Raster. */
+/* Einfache Einzel- und Mehrfachauswahl im Button-Stil: das Raster erzeugt
+   gleichmäßige Spalten und fällt bei schmalen Viewports automatisch um. */
 :is(.list-radio, .multiple-opt) .bootstrap-buttons-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
@@ -552,7 +760,7 @@ label, .form-label, .control-label { line-height: 1.4; }
 :is(.list-radio, .multiple-opt) .bootstrap-buttons-list .form-check { padding: 0; }
 :is(.list-radio, .multiple-opt) .bootstrap-buttons-list .btn {
   display: flex;
-  min-height: 3.25rem;
+  min-height: var(--lf-choice-height);
   align-items: center;
   justify-content: center;
   padding: .75rem 1rem;
@@ -562,7 +770,23 @@ label, .form-label, .control-label { line-height: 1.4; }
 }
 :is(.list-radio, .multiple-opt) .bootstrap-buttons-list .btn p { margin: 0; }
 
-/* Listenoptionen: volle Zeile, klare Auswahl und einheitliche Abstände. */
+/* Bei normalen Mehrfachauswahlen bleibt das Checkbox-Zeichen links und die
+   Beschriftung daneben vertikal ausgerichtet. */
+.multiple-opt .checkbox-item:not(td):not(th):not(.imageselect-listitem) {
+  display: flex;
+  align-items: center;
+}
+.multiple-opt .checkbox-item:not(td):not(th):not(.imageselect-listitem) label {
+  display: flex;
+  align-items: center;
+  min-height: 1.5rem;
+  line-height: 1.4;
+}
+.multiple-opt .checkbox-item:not(td):not(th):not(.imageselect-listitem) label p { margin: 0; }
+
+/* Listenoptionen werden untereinander mit konstantem Abstand angeordnet.
+   Die Auswahl mit „Sonstiges“-Textfeld erhält eine einzelne gemeinsame Karte;
+   die verschachtelte Checkbox-Karte und der innere Feldrahmen werden entfernt. */
 .list-radio .answers-list:not(.bootstrap-buttons-list),
 .multiple-opt .answers-list,
 .multiple-opt-comments .answers-list,
@@ -583,6 +807,66 @@ label, .form-label, .control-label { line-height: 1.4; }
   border-radius: var(--lf-radius);
   background-color: var(--lf-surface);
 }
+.multiple-opt .answers-list > .answer-item:has(.othertext-item, .other-text-item),
+.multiple-opt-comments .answers-list > .answer-item:has(.othertext-item, .other-text-item) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem 1rem;
+  min-height: var(--lf-choice-height);
+  padding: .8rem 1rem;
+  border: 1px solid var(--lf-control-border);
+  border-radius: var(--lf-radius);
+  background-color: var(--lf-surface);
+  box-shadow: 0 1px 2px rgb(30 30 30 / .04);
+  transition: background-color .15s ease, border-color .15s ease, box-shadow .15s ease;
+}
+/* Hover, Tastaturfokus und Auswahl werden auf der ganzen kombinierten Karte
+   angezeigt, nicht nur auf der Checkbox oder dem Textfeld. */
+.multiple-opt .answers-list > .answer-item:has(.othertext-item, .other-text-item):hover,
+.multiple-opt-comments .answers-list > .answer-item:has(.othertext-item, .other-text-item):hover {
+  border-color: var(--lf-control);
+  background-color: var(--lf-control-hover-bg);
+}
+.multiple-opt .answers-list > .answer-item:has(.othertext-item, .other-text-item):focus-within,
+.multiple-opt-comments .answers-list > .answer-item:has(.othertext-item, .other-text-item):focus-within {
+  outline: 3px solid var(--lf-focus);
+  outline-offset: 2px;
+}
+.multiple-opt .answers-list > .answer-item:has(.othertext-item, .other-text-item):has(input[type="checkbox"]:checked),
+.multiple-opt-comments .answers-list > .answer-item:has(.othertext-item, .other-text-item):has(input[type="checkbox"]:checked) {
+  border-color: var(--lf-control-selected-border);
+  background-color: var(--lf-control-selected-bg);
+}
+/* Die innere Checkbox ist nur noch Inhalt der gemeinsamen Karte. Das Textfeld
+   nimmt den übrigen Platz ein und bleibt randlos, damit kein doppelter Rahmen
+   entsteht. */
+.multiple-opt .answers-list > .answer-item:has(.othertext-item, .other-text-item) .checkbox-item,
+.multiple-opt-comments .answers-list > .answer-item:has(.othertext-item, .other-text-item) .checkbox-item {
+  flex: 0 0 auto;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.multiple-opt .answers-list > .answer-item:has(.othertext-item, .other-text-item) :is(.othertext-item, .other-text-item),
+.multiple-opt-comments .answers-list > .answer-item:has(.othertext-item, .other-text-item) :is(.othertext-item, .other-text-item) {
+  flex: 1 1 14rem;
+  min-width: 0;
+}
+.multiple-opt .answers-list > .answer-item:has(.othertext-item, .other-text-item) :is(.othertext-item, .other-text-item) .form-control,
+.multiple-opt-comments .answers-list > .answer-item:has(.othertext-item, .other-text-item) :is(.othertext-item, .other-text-item) .form-control {
+  width: 100%;
+  min-width: 0;
+  height: 2rem;
+  min-height: 2rem;
+  padding-block: 0;
+  border-color: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+}
 .multiple-opt .othertext-item,
 .multiple-opt-comments .othertext-item,
 .list-with-comment .othertext-item { max-width: 100%; }
@@ -590,29 +874,24 @@ label, .form-label, .control-label { line-height: 1.4; }
 .multiple-opt-comments .other-text-item .form-control,
 .list-with-comment .other-text-item .form-control { width: min(100%, 32rem); }
 
-/* Ja/Nein und Geschlecht bleiben als kompakte Einzelauswahl erkennbar. */
+/* Ja/Nein- und Geschlechtsfragen bleiben kompakte Gruppen statt breiter
+   Antwortkarten. */
 .yes-no .answer-container,
 .gender .answer-container { max-width: 34rem; }
 .yes-no .answer-item.btn,
 .gender .answer-item.btn { min-width: 7rem; min-height: 2.75rem; }
 
-/* Tabellen- und Matrixfragen: Tabellenkopf, Zeilen und Auswahlfelder ordnen. */
-:is(.array-flexible-row, .array-flexible-column, .array-flexible-dual-scale,
-    .array-flexible-duel-scale, .array-10-pt, .array-5-pt,
-    .array-yes-uncertain-no, .array-increase-same-decrease,
-    .array-multi-flexi, .array-multi-flexi-text, .array-texts, .array-numbers,
-    .choice-5-pt-radio) table.ls-answers {
+/* Tabellen- und Matrixfragen: [class*="array-"] deckt die Fruity-Arraytypen
+   ab, die 5-Punkt-Auswahl wird separat ergänzt. Kopfzeilen, Antwortzeilen und
+   Auswahlzellen behalten eine tabellarische Ausrichtung. */
+:is([class*="array-"], .choice-5-pt-radio) table.ls-answers {
   border-collapse: separate;
   border-spacing: 0;
   overflow: hidden;
   border: 1px solid var(--lf-line);
   border-radius: var(--lf-radius);
 }
-:is(.array-flexible-row, .array-flexible-column, .array-flexible-dual-scale,
-    .array-flexible-duel-scale, .array-10-pt, .array-5-pt,
-    .array-yes-uncertain-no, .array-increase-same-decrease,
-    .array-multi-flexi, .array-multi-flexi-text, .array-texts, .array-numbers,
-    .choice-5-pt-radio) table.ls-answers thead th {
+:is([class*="array-"], .choice-5-pt-radio) table.ls-answers thead th {
   padding: .75rem .5rem;
   background-color: var(--lf-subtle);
   color: var(--lf-ink);
@@ -620,31 +899,19 @@ label, .form-label, .control-label { line-height: 1.4; }
   font-weight: 600;
   vertical-align: middle;
 }
-:is(.array-flexible-row, .array-flexible-column, .array-flexible-dual-scale,
-    .array-flexible-duel-scale, .array-10-pt, .array-5-pt,
-    .array-yes-uncertain-no, .array-increase-same-decrease,
-    .array-multi-flexi, .array-multi-flexi-text, .array-texts, .array-numbers,
-    .choice-5-pt-radio) table.ls-answers tbody th {
+:is([class*="array-"], .choice-5-pt-radio) table.ls-answers tbody th {
   padding: .75rem;
   background-color: var(--lf-surface);
   color: var(--lf-ink);
   font-weight: 600;
   text-align: start;
 }
-:is(.array-flexible-row, .array-flexible-column, .array-flexible-dual-scale,
-    .array-flexible-duel-scale, .array-10-pt, .array-5-pt,
-    .array-yes-uncertain-no, .array-increase-same-decrease,
-    .array-multi-flexi, .array-multi-flexi-text, .array-texts, .array-numbers,
-    .choice-5-pt-radio) table.ls-answers tbody td {
+:is([class*="array-"], .choice-5-pt-radio) table.ls-answers tbody td {
   padding: .5rem;
   border-bottom: 1px solid var(--lf-line);
   vertical-align: middle;
 }
-:is(.array-flexible-row, .array-flexible-column, .array-flexible-dual-scale,
-    .array-flexible-duel-scale, .array-10-pt, .array-5-pt,
-    .array-yes-uncertain-no, .array-increase-same-decrease,
-    .array-multi-flexi, .array-multi-flexi-text, .array-texts, .array-numbers,
-    .choice-5-pt-radio) table.ls-answers tbody tr:last-child > * { border-bottom: 0; }
+:is([class*="array-"], .choice-5-pt-radio) table.ls-answers tbody tr:last-child > * { border-bottom: 0; }
 table.ls-answers td.radio-item,
 table.ls-answers td.checkbox-item {
   min-width: 2.75rem;
@@ -661,8 +928,16 @@ table.ls-answers td.checkbox-item:focus-within {
   outline: 2px solid var(--lf-focus);
   outline-offset: -3px;
 }
+.question-container .answer-container,
+.question-container table.ls-answers { max-width: 100%; }
+/* Nur breite Matrix-Antworten dürfen horizontal scrollen. Ein Overflow am
+   allgemeinen Antwortcontainer würde Dropdown-Menüs abschneiden. */
+:is(.question-container[class*="array-"], .question-container.choice-5-pt-radio) .answer-container,
+.question-container :is([class*="array-"], .choice-5-pt-radio) .answer-container { overflow-x: auto; }
 
-/* Rangfolge und Sortierlisten als eigenständige, griffige Karten. */
+/* Rangfolge und Sortierlisten werden als eigenständige Karten dargestellt.
+   Verfügbare und sortierte Einträge unterscheiden sich durch Fläche bzw.
+   gestrichelten Rahmen; die Drag-Handles behalten ihre Plugin-Funktion. */
 .select-sortable-lists .sortable-list,
 .ranking-advanced-style .sortable-list { border: 0; }
 .select-sortable-lists .ranking-available-items,
@@ -720,14 +995,20 @@ table.ls-answers td.checkbox-item:focus-within {
   font-weight: 600;
 }
 
-/* Numerische Antworten und Schieberegler. */
+/* Numerische Felder bleiben kompakt. Slider erhalten eine klare Spur, einen
+   markanten Griff und einen sichtbaren Tastaturfokus. */
 .numeric .answer-container .form-control,
 .date .answer-container .form-control,
 .date-time .answer-container .form-control,
 .time .answer-container .form-control { max-width: 18rem; }
+.text-short .answer-container input.form-control,
+.numeric .answer-container .form-control,
+.date .answer-container .form-control,
+.date-time .answer-container .form-control,
+.time .answer-container .form-control { min-height: var(--lf-choice-height); }
 .list-dropdown .answer-container .bootstrap-select { width: min(100%, 38rem); }
 .numeric-multi .question-item:not(.slider-item) .form-control { max-width: 18rem; }
-.numeric-multi .slider-item { max-width: 48rem; }
+.numeric-multi .slider-item { max-width: var(--lf-copy-width); }
 .numeric-multi .slider .slider-track,
 .slider-list .slider .slider-track {
   background-color: var(--lf-line) !important;
@@ -760,21 +1041,25 @@ table.ls-answers td.checkbox-item:focus-within {
 }
 .numeric-multi .slider .tooltip-arrow { border-top-color: var(--lf-darkred); }
 
-/* Textfelder, Kurztexte, zusammengesetzte Eingaben und Textanzeigen. */
+/* Kurze und mehrteilige Texteingaben sind begrenzt breit; längere Antworten
+   bekommen eine größere Schreibfläche. */
 .text-short .answer-container input.form-control,
 .multiple-short-txt .answer-container input.form-control,
 .multiple-opt-comments .answer-container input.form-control,
 .list-with-comment .answer-container input.form-control {
   max-width: 38rem;
 }
+.text-short .answer-container input.form-control { min-height: var(--lf-choice-height); }
 .text-long .answer-container textarea.form-control,
 .text-huge .answer-container textarea.form-control {
   width: 100%;
-  max-width: 48rem;
-  min-height: 9rem;
+  max-width: var(--lf-copy-width);
+  min-height: 11rem;
   line-height: 1.5;
   resize: vertical;
 }
+/* Unterfragen mit mehreren Eingabefeldern werden durch feine Trennlinien
+   strukturiert, ohne jede Zeile als eigene Karte zu rahmen. */
 .multiple-short-txt .answer-container .question-item,
 .numeric-multi .answer-container .question-item:not(.slider-item) {
   padding-block: .5rem;
@@ -782,6 +1067,8 @@ table.ls-answers td.checkbox-item:focus-within {
 }
 .multiple-short-txt .answer-container .question-item:last-child,
 .numeric-multi .answer-container .question-item:last-child { border-bottom: 0; }
+/* Hinweise und reine Textanzeigen heben sich als Informationstafel vom
+   interaktiven Fragenbereich ab. Berechnete Werte erhalten eine kleine Fläche. */
 .boilerplate .answer-container,
 .text-display .answer-container {
   max-width: 72ch;
@@ -804,7 +1091,8 @@ table.ls-answers td.checkbox-item:focus-within {
   font-weight: 600;
 }
 
-/* Bildauswahl und Uploads bewahren ihre Inhalte, bekommen aber klare Rahmen. */
+/* Bildauswahl und Uploads bewahren ihre vom Theme erzeugten Inhalte und
+   Vorschaubereiche; ergänzt werden nur Kartenrahmen und Markenstil. */
 .imageselect-listitem .imageselect-container,
 .question-container.image-select .answer-item,
 .question-container.multiple-image-select .answer-item {
@@ -857,7 +1145,9 @@ table.ls-answers td.checkbox-item:focus-within {
 .upload-files input[type="file"]::file-selector-button:hover,
 .question-container input[type="file"].form-control::file-selector-button:hover { background-color: var(--lf-btn-bg-hover); }
 
-/* Date-/Zeit-Picker und gezeichnete Karten nur am äußeren Rand gestalten. */
+/* Date-/Zeit-Picker erhalten dieselbe Oberfläche wie andere Menüs. Karten- und
+   Kartenbrowser-Widgets werden nur außen eingerahmt, damit die Karte selbst
+   weiterhin interaktiv bleibt. */
 .tempus-dominus-widget {
   background-color: var(--lf-surface) !important;
   color: var(--lf-ink);
@@ -885,16 +1175,24 @@ table.ls-answers td.checkbox-item:focus-within {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  /* Systempräferenz respektieren: Scrollen und Zustandswechsel animieren dann
+     nicht, ohne die Zustandsfarben oder Fokusmarkierungen zu entfernen. */
+  html { scroll-behavior: auto; }
   .btn, .form-control, .form-select, .bootstrap-select > .dropdown-toggle,
   :where(.checkbox-item, .radio-item),
   .select-sortable-lists .sortable-item, .ranking-advanced-style .sortable-item,
-  .imageselect-listitem .imageselect-container {
+  .imageselect-listitem .imageselect-container,
+  .multiple-opt .answers-list > .answer-item:has(.othertext-item, .other-text-item),
+  .multiple-opt-comments .answers-list > .answer-item:has(.othertext-item, .other-text-item),
+  .lf-header-progress .progress-bar {
     transition: none;
   }
 }
 
 
 /* 9) Tabellen, Karten, Menüs, Sonstiges ================================== */
+/* Allgemeine Inhaltskomponenten, die nicht zu einem einzelnen Fragetyp
+   gehören, erhalten ebenfalls die neutrale Farb- und Rahmenpalette. */
 .table { color: var(--lf-ink); border-color: var(--lf-line); }
 .ls-even,
 .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
@@ -903,6 +1201,7 @@ table.ls-answers td.checkbox-item:focus-within {
 }
 .numeric-multi .ls-group-total-separator hr { border-color: var(--lf-line) !important; }
 
+/* Bootstrap-Karten behalten ihre Struktur, verlieren aber starke Schatten. */
 .fruity_twentythree .welcome .card, .card {
   background-color: var(--lf-surface);
   border: 1px solid var(--lf-line);
@@ -910,6 +1209,8 @@ table.ls-answers td.checkbox-item:focus-within {
   border-radius: var(--lf-radius);
 }
 
+/* Überschriften in Verwaltungs- und Übersichtsbereichen nutzen den roten
+   Unterstrich als kleinen Markenakzent. */
 .fruity_twentythree .side-body h3, .fruity_twentythree .list-surveys h3,
 .fruity_twentythree .pagetitle {
   color: var(--lf-ink);
@@ -918,6 +1219,8 @@ table.ls-answers td.checkbox-item:focus-within {
 .fruity_twentythree .page-header { border-bottom: 1px solid var(--lf-line); }
 .fruity_twentythree blockquote { border-left: 4px solid var(--lf-gray); }
 
+/* Dropdowns in Navigation und Formularen verwenden eine gemeinsame Fläche;
+   aktivierte oder fokussierte Einträge werden deutlich invertiert dargestellt. */
 .dropdown-menu {
   background-color: var(--lf-surface);
   color: var(--lf-ink);
@@ -933,7 +1236,9 @@ table.ls-answers td.checkbox-item:focus-within {
   background-color: var(--lf-btn-bg) !important;
   color: var(--lf-btn-text) !important;
 }
+.survey-nav, .ls-questionindex { border-radius: var(--lf-radius); }
 
+/* Aktionsschaltflächen im Datum-/Zeit-Picker verwenden dieselbe Primärfarbe. */
 .tempus-dominus-widget button {
   background-color: var(--lf-btn-bg) !important;
   border-color: var(--lf-btn-bg) !important;
@@ -945,10 +1250,12 @@ table.ls-answers td.checkbox-item:focus-within {
 
 
 /* 10) Footer, Fehlerseite ================================================= */
+/* Der Theme-Footer ist ein ruhiger, zentrierter Navigationsbereich. */
 .lf-footer {
   border-top: 1px solid var(--lf-line);
-  margin-top: 4rem;
-  padding: 2rem 0;
+  margin-top: 2rem;
+  padding: 1.5rem 1rem;
+  background: var(--lf-bg);
   color: var(--lf-gray);
   font-size: 0.9rem;
 }
@@ -965,6 +1272,8 @@ table.ls-answers td.checkbox-item:focus-within {
 .lf-footer a { color: var(--lf-gray); }
 .lf-footer a:hover, .lf-footer a:focus { color: var(--lf-link); }
 
+/* Fehlerseiten bekommen unabhängig vom normalen Survey-Hintergrund eine
+   schlichte, helle Darstellung mit schmalem Textbereich. */
 body.error-page {
   height: auto;
   min-height: 100vh;
@@ -978,6 +1287,10 @@ body.error-page .container { display: block; height: auto; }
   margin: 0 auto;
   padding: 4rem 1.5rem 2rem;
 }
+
+
+/* Logo und Titel geben Fehlerseiten dieselbe typografische Hierarchie wie der
+   Survey, während lange Fehlermeldungen und Tracebacks umbrechen dürfen. */
 .error-logo-container { margin-bottom: 2.5rem; }
 .error-logo-container .logo { height: 3.5rem; width: auto; max-width: 100%; }
 
@@ -1011,34 +1324,19 @@ body.error-page .error-link { font-size: inherit; line-height: inherit; color: v
 }
 
 
-/* 11) Dunkelmodus (Systemvorgabe) ======================================== */
-@media (prefers-color-scheme: dark) {
-  body, body.error-page {
-    background-color: var(--lf-bg) !important;
-    color: var(--lf-ink) !important;
-  }
-
-  .question-container, .card, .modal-content, .list-group-item,
-  .popover, .ui-datepicker-div, .tempus-dominus-widget,
-  .jumbotron, .well, pre, code {
-    background-color: var(--lf-surface) !important;
-    color: var(--lf-ink) !important;
-    border-color: var(--lf-line) !important;
-  }
-
-  .form-control, .form-select { border-color: var(--lf-gray); }
-
-  :where(body, main, article, section, div, p, span, ul, ol, li, dl, dt, dd,
-         td, th, label, legend, small, strong, b, em, i, blockquote, caption,
-         summary, output, h1, h2, h3, h4, h5, h6):not(:where(
-           a, a *, .btn, .btn *,
-           [class^="ri-"], [class*=" ri-"], [class*="fa-"],
-           .progress-bar, .lf-footer *,
-           .ls-answers th, .ls-answers th *
-         )) {
-    color: var(--lf-ink) !important;
-  }
-}
-
-/* Umfrageliste (Startseite) */
+/* Umfrageliste (Startseite): Titel und Links werden im mobilen Breakpoint
+   gemeinsam mit Header, Fortschrittslinie und Fragenabständen angepasst. */
 .lf-survey-list-title { text-align: center; margin: 0 0 1.5rem; }
+
+@media (max-width: 767.98px) {
+  /* Kompaktere Navigation und geringere Seitenabstände auf schmalen Geräten;
+     die Lesespaltenbreite selbst wird weiter über --lf-container-width begrenzt. */
+  body:not(.error-page) { padding-top: 4.5rem; }
+  #survey-nav { min-height: 3.8rem; }
+  #survey-nav .navbar-brand img { height: 2.35rem; }
+  .lf-header-progress { top: 3.8rem; }
+  body:not(.error-page) .outerframe { padding-block: 2.25rem 3rem; }
+  .question-container { margin-bottom: 2.75rem; }
+  .question-container table.ls-answers { font-size: .9rem; }
+  .lf-footer ul { gap: .75rem 1.25rem; }
+}
